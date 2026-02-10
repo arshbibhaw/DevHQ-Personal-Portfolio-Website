@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aakarsh | DevHQ</title>
+    <link rel="icon" href="portfolio_assests/DevHQ_Favicon.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+</head>
+
+<body>
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <div class="background-container">
+        <canvas id="bg-canvas"></canvas>
+
+    </div>
+
+    <main class="hero" id="home">
+
+        <div class="floating-icon icon-top-left">
+            <i class="fa-solid fa-code"></i>
+        </div>
+        <div class="floating-icon icon-top-right">
+            <i class="fa-solid fa-brain"></i>
+        </div>
+        <div class="floating-icon icon-bottom-left">
+            <i class="fa-solid fa-trophy"></i>
+        </div>
+        <div class="floating-icon icon-bottom-right">
+            <i class="fa-regular fa-lightbulb"></i>
+        </div>
+
+        <div class="content-wrapper">
+            <h2 class="sub-title">Woah! You Landed on the Portfolio Website of The</h2>
+            <br>
+            <br>
+            <h1 class="main-title">
+                <span class="purple-text" id="typing-text"></span>
+            </h1>
+            <br>
+            <br>
+            <h5 class="year">Aakarsh Bibhaw | CSE Sophomore</h5>
+            <br>
+            <div class="hero-buttons">
+                <a href="https://linkedin.com/in/aakarsh-bibhaw" target="_blank" class="btn-resume">Let's Connect</a>
+                <a href="portfolio_assests/Aakarsh_Resume.pdf" target="_blank" class="btn-resume">VIEW RESUME</a>
+            </div>
+        </div>
+    </main>
+
+    <section class="about-section" id="about">
+        <div class="glass-card scroll-reveal">
+            <h2>About Me - <span class="purple-text">Behind The Code!</span></h2>
+            <p>
+                I am someone who thrives on learning, problem-solving, and continuous growth. My personality blends
+                curiosity, adaptability, and persistence, which helps me approach challenges with optimism and clarity.
+                I value collaboration and clear communication, but I am equally comfortable taking initiative and
+                working independently.
+
+                <br><br>At my core, I am driven by a desire to make an impact, stay open to new perspectives, and keep
+                evolving
+                both personally and professionally.
+            </p>
+        </div>
+    </section>
+
+    <br>
+
+    <section class="projects-section" id="projects">
+        <h2 class="section-title">Projects Showcase - <span class="purple-text">What I've Built!</span></h2>
+        <br>
+        <div class="timeline">
+            <div class="timeline-line">
+                <div class="timeline-progress"></div>
+            </div>
+
+            <div class="timeline-item left scroll-reveal">
+                <div class="timeline-number">01</div>
+                <div class="timeline-content">
+                    <div class="project-tag">Productivity Extension</div>
+                    <i class="fa-solid fa-robot card-icon"></i>
+                    <h3>SwiftFill</h3>
+                    <p>
+                        Building an automated browser extension leveraging Semantic Matching, Local NLP, and
+                        Self-Learning
+                        Feedback Loops to auto-fill forms with high accuracy while ensuring privacy via on-device data
+                        storage.
+                    </p>
+                    <a href="javascript:void(0)" class="project-link inactive">Dev in Progress !!</a>
+                </div>
+                <div class="timeline-date">FEB-2K26</div>
+                <div class="timeline-dot"></div>
+            </div>
+
+            <div class="timeline-item right scroll-reveal">
+                <div class="timeline-number">02</div>
+                <div class="timeline-content">
+                    <div class="project-tag">Frontend Project</div>
+                    <i class="fa-solid fa-code card-icon"></i>
+                    <h3>Personal Portfolio Website</h3>
+                    <p>
+                        Designed and developed a responsive portfolio to showcase projects, technical skills, and
+                        experience,
+                        focusing on clean architecture, performance, and accessibility.
+                    </p>
+                    <a href="https://github.com/arshbibhaw/DevHQ-Personal-Portfolio-Website" target="_blank"
+                        class="project-link">View
+                        Project <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                <div class="timeline-date">JAN-2K26</div>
+                <div class="timeline-dot"></div>
+            </div>
+
+            <div class="timeline-item left scroll-reveal">
+                <div class="timeline-number">03</div>
+                <div class="timeline-content">
+                    <div class="project-tag">Security Extension</div>
+                    <i class="fa-solid fa-shield-halved card-icon"></i>
+                    <h3>TruCheck</h3>
+                    <p>
+                        Built a proactive browser security extension that assigns a real-time Trust Score to websites
+                        using Google
+                        Safe Browsing and HaveIBeenPwned APIs, actively preventing theft through intent-aware Login
+                        Shield.
+                    </p>
+                    <a href="https://github.com/arshbibhaw/TruCheck-Browser-Security-Extension" target="_blank"
+                        class="project-link">View Project <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                <div class="timeline-date">NOV-2K25</div>
+                <div class="timeline-dot"></div>
+            </div>
+        </div>
+    </section>
+
+    <br>
+
+    <section class="skills-section" id="skills">
+        <h2 class="section-title">Technical Skills - <span class="purple-text">Core Expertise!</span></h2>
+        <div class="skill-grid">
+
+            <div class="skill-row">
+                <div class="skill-card">
+                    <i class="devicon-html5-plain colored"></i>
+                    <span>HTML</span>
+                </div>
+                <div class="skill-card">
+                    <i class="devicon-css3-plain colored"></i>
+                    <span>CSS</span>
+                </div>
+                <div class="skill-card">
+                    <i class="devicon-javascript-plain colored"></i>
+                    <span>JavaScript</span>
+                </div>
+                <div class="skill-card">
+                    <i class="devicon-react-original colored"></i>
+                    <span>React.JS</span>
+                </div>
+            </div>
+
+            <div class="skill-row">
+                <div class="skill-card">
+                    <i class="devicon-azuresqldatabase-plain colored"></i>
+                    <span>SQL</span>
+                </div>
+                <div class="skill-card">
+                    <i class="fa-brands fa-python" style="color: #3776AB;"></i>
+                    <span>Python</span>
+                </div>
+                <div class="skill-card">
+                    <i class="devicon-c-plain colored"></i>
+                    <span>C</span>
+                </div>
+                <div class="skill-card">
+                    <i class="devicon-cplusplus-plain colored"></i>
+                    <span>C++</span>
+                </div>
+            </div>
+
+            <div class="skill-row">
+                <div class="skill-card">
+                    <i class="devicon-flutter-plain colored"></i>
+                    <span>Flutter</span>
+                </div>
+                <div class="skill-card">
+                    <i class="devicon-tailwindcss-original colored"></i>
+                    <span>Tailwind CSS</span>
+                </div>
+                <div class="skill-card">
+                    <i class="devicon-nodejs-plain-wordmark colored"></i>
+                    <span>Node.JS</span>
+                </div>
+                <div class="skill-card">
+                    <i class="devicon-express-original"></i>
+                    <span>Express.JS</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="certifications-section" id="certifications">
+        <h2 class="section-title">Certifications - <span class="purple-text">Learning Milestones!</span></h2>
+
+        <div class="cert-grid">
+
+            <div class="cert-item">
+                <div class="cert-img-wrapper">
+                    <img src="portfolio_assests/CollegeDunia_Internship_Certificate.jpg"
+                        alt="Content Developer Internship">
+                    <div class="cert-overlay">
+                        <a href="https://drive.google.com/file/d/1DQglyopGx33i_EX7JznlJZNi22Bp8BII/view?usp=sharing"
+                            target="_blank" class="cert-overlay-link">
+                            <span>View Credentials</span>
+                            <i class="fa-solid fa-arrow-right-long"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="cert-info">
+                    <h3>Content Developer Intern</h3>
+                    <p>Managed production-stage content on CMS platforms; debugged rendering issues through analyzing
+                        logs and utilized AI-assisted automation to improve efficiency and content scalability.</p>
+                </div>
+            </div>
+
+            <div class="cert-item">
+                <div class="cert-img-wrapper">
+                    <img src="portfolio_assests/HackHatch_Certificate.png" alt="HackHatch: The Startup Hackathon">
+                    <div class="cert-overlay">
+                        <a href="https://drive.google.com/file/d/1cLeGzJsHZ7rgJoGyZQvSstIsPeZ4IAOb/view?usp=sharing"
+                            target="_blank" class="cert-overlay-link">
+                            <span>View Credentials</span>
+                            <i class="fa-solid fa-arrow-right-long"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="cert-info">
+                    <h3>HackHatch: E-Cell, IIIT Delhi</h3>
+                    <p>Ranked among the Top 100 teams from 1000+ teams across the nation in the finals driving startup
+                        ideation, rapid prototyping and investor pitching to develop a scalable, real world solution.
+                    </p>
+                </div>
+            </div>
+
+            <div class="cert-item">
+                <div class="cert-img-wrapper">
+                    <img src="portfolio_assests/Python_Developer_Certificate.jpg" alt="Python Developer">
+                    <div class="cert-overlay">
+                        <a href="https://www.sololearn.com/certificates/CC-GRWZJQ3E" target="_blank"
+                            class="cert-overlay-link">
+                            <span>View Credentials</span>
+                            <i class="fa-solid fa-arrow-right-long"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="cert-info">
+                    <h3>Python Developer</h3>
+                    <p>Certified Python Developer, demonstrating proficiency in core Python concepts,
+                        problem-solving, and practical coding skills.</p>
+                </div>
+            </div>
+
+            <div class="cert-item">
+                <div class="cert-img-wrapper">
+                    <img src="portfolio_assests/HackerRank_SQL_Basic_Certificate.jpg" alt="HackerRank SQL Basic">
+                    <div class="cert-overlay">
+                        <a href="https://www.hackerrank.com/certificates/4c4a99fffc73" target="_blank"
+                            class="cert-overlay-link">
+                            <span>View Credentials</span>
+                            <i class="fa-solid fa-arrow-right-long"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="cert-info">
+                    <h3>HackerRank SQL Basic</h3>
+                    <p>Completed HackerRank SQL Basic course, demonstrating proficiency in SQL database modeling and
+                        aggregation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <br>
+
+    <section class="profiles-section" id="profiles">
+        <h2 class="section-title">Web Presence - <span class="purple-text">Dev Network!</span></h2>
+        <div class="profile-header scroll-reveal">
+            <div class="profile-img-main">
+                <img src="portfolio_assests/Professional_Picture.jpg" alt="Aakarsh Bibhaw">
+            </div>
+            <div class="profile-text">
+                <p class="purple-text">@arshbibhaw</p>
+            </div>
+        </div>
+
+        <div class="profiles-grid">
+
+            <a href="https://linkedin.com/in/aakarsh-bibhaw" target="_blank" class="profile-card scroll-reveal">
+                <div class="profile-icon">
+                    <i class="fa-brands fa-linkedin" style="color: #0077b5;"></i>
+                </div>
+                <div class="profile-info">
+                    <h3>LinkedIn</h3>
+                    <p>Connect</p>
+                </div>
+            </a>
+
+            <a href="https://github.com/arshbibhaw" target="_blank" class="profile-card scroll-reveal">
+                <div class="profile-icon">
+                    <i class="fa-brands fa-github" style="color: #fff;"></i>
+                </div>
+                <div class="profile-info">
+                    <h3>GitHub</h3>
+                    <p>Commit</p>
+                </div>
+            </a>
+
+            <a href="https://leetcode.com/arshbibhaw" target="_blank" class="profile-card scroll-reveal">
+                <div class="profile-icon">
+                    <i class="devicon-leetcode-plain colored"></i>
+                </div>
+                <div class="profile-info">
+                    <h3>LeetCode</h3>
+                    <p>Compete</p>
+                </div>
+            </a>
+
+            <a href="https://hackerrank.com/arshbibhaw" target="_blank" class="profile-card scroll-reveal">
+                <div class="profile-icon">
+                    <i class="fa-brands fa-hackerrank" style="color: #2ec866;"></i>
+                </div>
+                <div class="profile-info">
+                    <h3>HackerRank</h3>
+                    <p>Code</p>
+                </div>
+            </a>
+        </div>
+        <br>
+        <p class="profile-note">You can explore further by clicking on any of the profile cards above!</p>
+    </section>
+
+    <br>
+
+    <section class="contact-section" id="contact">
+        <div class="contact-container scroll-reveal">
+            <h2 class="section-title">Get In Touch - <span class="purple-text">Ask Me Anything!</span></h2>
+            <h4 class="contact-note">Ready to collaborate or have a project in mind?<br> I'm always open to new
+                opportunities and interesting conversations.</h4>
+            <div class="contact-card">
+                <form id="contactForm" class="contact-form">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" required placeholder=" " autocomplete="off">
+                        <label for="name">Name</label>
+                        <i class="fa-solid fa-user input-icon"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" required placeholder=" " autocomplete="off">
+                        <label for="email">Email</label>
+                        <i class="fa-solid fa-envelope input-icon"></i>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" rows="4" required placeholder=" "></textarea>
+                        <label for="message">Message</label>
+                        <i class="fa-solid fa-comment input-icon"></i>
+                    </div>
+                    <button type="submit" class="btn-resume btn-submit">
+                        <span>Send Message</span>
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <br>
+
+    <footer class="footer">
+        <div class="footer-container">
+
+            <div class="footer-brand">
+                <h2 class="footer-logo">Arsh<span class="purple-text">Bibhaw</span></h2>
+                <p class="footer-tagline">Innovation at the Intersection of Code and Design !!</p>
+            </div>
+
+            <ul class="footer-nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#certifications">Certifications</a></li>
+                <li><a href="#profiles">Profiles</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+
+            <div class="footer-socials">
+                <a href="https://linkedin.com/in/aakarsh-bibhaw" target="_blank" class="social-link linkedin"><i
+                        class="fa-brands fa-linkedin"></i></a>
+                <a href="https://github.com/arshbibhaw" target="_blank" class="social-link github"><i
+                        class="fa-brands fa-github"></i></a>
+                <a href="mailto:cse.arsh@gmail.com" target="_blank" class="social-link email"><i
+                        class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Aakarsh Bibhaw. All rights reserved.</p>
+            <button id="backToTop" class="back-to-top" aria-label="Back to Top">
+                <i class="fa-solid fa-arrow-up"></i>
+            </button>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script src="3d_background.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
