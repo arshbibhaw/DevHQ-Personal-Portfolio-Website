@@ -1,6 +1,0 @@
-# Exclude raw ideas folder
-raw_ideas/
-
-# System Files
-.DS_Store
-Thumbs.db
