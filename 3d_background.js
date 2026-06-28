@@ -1,6 +1,5 @@
 
 
-
 const canvas = document.querySelector('#bg-canvas');
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -13,18 +12,15 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
 
-
 const starsGeometry = new THREE.BufferGeometry();
 const starsCount = 3200;
 const posArray = new Float32Array(starsCount * 3);
-
 
 for (let i = 0; i < starsCount * 3; i++) {
     posArray[i] = (Math.random() - 0.5) * 100; 
 }
 
 starsGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
 
 function createStarTexture() {
     const canvas = document.createElement('canvas');
@@ -35,7 +31,6 @@ function createStarTexture() {
     const center = 16;
     const radius = 14;
 
-    
     const gradient = ctx.createRadialGradient(center, center, 0, center, center, radius);
     gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
     gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.8)');
@@ -49,14 +44,12 @@ function createStarTexture() {
     return new THREE.CanvasTexture(canvas);
 }
 
-
 const starsMaterial = new THREE.PointsMaterial({
     size: 0.15, 
     map: createStarTexture(),
     color: 0xffffff,
     transparent: true,
     opacity: 0.8,
-    
     sizeAttenuation: true,
     depthWrite: false 
 });
@@ -65,7 +58,6 @@ const starMesh = new THREE.Points(starsGeometry, starsMaterial);
 scene.add(starMesh);
 
 camera.position.z = 20;
-
 
 let mouseX = 0;
 let mouseY = 0;
@@ -78,29 +70,22 @@ document.addEventListener('mousemove', (event) => {
     mouseY = (event.clientY - windowHalfY) * 0.0001;
 });
 
-
 const clock = new THREE.Clock();
 
 function animate() {
     const elapsedTime = clock.getElapsedTime();
 
-    
     starMesh.rotation.y += 0.0001; 
     starMesh.rotation.x += 0.00005; 
 
-    
     starMesh.rotation.y += mouseX * 0.5;
     starMesh.rotation.x += mouseY * 0.5;
-
-    
-    
 
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
 }
 
 animate();
-
 
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -109,81 +94,74 @@ window.addEventListener('resize', () => {
 });
 
 
+// ═══════════════════════════════════════════════════════
+// GSAP + ScrollTrigger Animations
+// ═══════════════════════════════════════════════════════
+
 gsap.registerPlugin(ScrollTrigger);
 
 
-
-
-
+// ── Hero: Intro sequence ──
 const hero = document.querySelector('.hero');
 if (hero) {
     const tl = gsap.timeline({ defaults: { ease: "power2.out", duration: 1 } });
 
-    
     tl.fromTo(".sub-title",
         { opacity: 0, y: 20 },
         { opacity: 1, y: 0 }
     )
-        
         .fromTo(".year",
             { opacity: 0, y: 20 },
             { opacity: 1, y: 0 },
             "-=0.5"
         )
-        
         .fromTo(".main-title",
             { opacity: 0, scale: 0.9, y: 20 },
             { opacity: 1, scale: 1, y: 0 },
             "-=0.5"
         )
-        
-        
         .fromTo(".hero-buttons .btn-resume:first-child",
             { opacity: 0, x: -50 },
             { opacity: 1, x: 0 },
             "-=0.5"
         )
-        
         .fromTo(".hero-buttons .btn-resume:last-child",
             { opacity: 0, x: 50 },
             { opacity: 1, x: 0 },
-            "<" 
+            "<"
         );
 }
 
 
-function animateSection(selector, directionX) {
-    const element = document.querySelector(selector);
-    if (element) {
-        gsap.fromTo(element,
-            { opacity: 0, x: directionX },
-            {
-                opacity: 1,
-                x: 0,
-                duration: 1.2,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: element,
-                    start: "top 80%",
-                    toggleActions: "play none none reverse"
-                }
+// ═══════════════════════════════════════════════════════
+// SCROLL ANIMATIONS — Projects Section through Contact
+// ═══════════════════════════════════════════════════════
+
+// Helper: Animate all section titles with a fade-up
+document.querySelectorAll('.section-title').forEach(title => {
+    gsap.fromTo(title,
+        { opacity: 0, y: 40 },
+        {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: title,
+                start: "top 88%",
+                toggleActions: "play none none reverse"
             }
-        );
-    }
-}
+        }
+    );
+});
 
 
-animateSection('.projects-section', -100);
-
-
+// ── Work Experience: Timeline items slide from their side ──
 const timelineItems = document.querySelectorAll('.timeline-item');
-timelineItems.forEach((item, index) => {
-    
-    
-    const direction = index % 2 === 0 ? -100 : 100;
-
+timelineItems.forEach((item) => {
+    const isLeft = item.classList.contains('left');
     gsap.fromTo(item,
-        { opacity: 0, x: direction },
+        { opacity: 0, x: isLeft ? -80 : 80 },
         {
             opacity: 1,
             x: 0,
@@ -199,11 +177,70 @@ timelineItems.forEach((item, index) => {
 });
 
 
-animateSection('.skills-section', 100);
+// ── Projects: Cards stagger up from bottom ──
+const projectCards = document.querySelectorAll('.experience-card');
+if (projectCards.length) {
+    gsap.fromTo(projectCards,
+        { opacity: 0, y: 60, scale: 0.95 },
+        {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.7,
+            ease: "back.out(1.4)",
+            stagger: 0.12,
+            scrollTrigger: {
+                trigger: '.experience-grid',
+                start: "top 80%",
+                toggleActions: "play none none reverse"
+            }
+        }
+    );
+}
 
 
-animateSection('.certifications-section', -100);
+// ── Skills: Cascade ripple reveal ──
+const skillCards = document.querySelectorAll('.skill-grid .skill-card');
+if (skillCards.length) {
+    gsap.fromTo(skillCards,
+        { opacity: 0, y: 40, scale: 0.9 },
+        {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.5,
+            ease: "power2.out",
+            stagger: {
+                each: 0.05,
+                from: "start"
+            },
+            scrollTrigger: {
+                trigger: '.skill-grid',
+                start: "top 82%",
+                toggleActions: "play none none reverse"
+            }
+        }
+    );
+}
 
 
-animateSection('.contact-section', 100);
 
+// ── Contact: Scale-up blur reveal ──
+const contactContainer = document.querySelector('.contact-container');
+if (contactContainer) {
+    gsap.fromTo(contactContainer,
+        { opacity: 0, scale: 0.92, filter: "blur(8px)" },
+        {
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: contactContainer,
+                start: "top 80%",
+                toggleActions: "play none none reverse"
+            }
+        }
+    );
+}

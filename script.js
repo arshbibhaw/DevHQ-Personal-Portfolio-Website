@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
-    const scrollElements = document.querySelectorAll('.scroll-reveal');
+    const scrollElements = document.querySelectorAll('.about-section .scroll-reveal');
     scrollElements.forEach(el => observer.observe(el));
 
     const typingText = document.getElementById('typing-text');
@@ -78,41 +78,52 @@ document.addEventListener('DOMContentLoaded', () => {
         el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hovered'));
     });
 
-    const timelineSection = document.querySelector('.timeline');
-    const timelineProgress = document.querySelector('.timeline-progress');
-    const timelineDots = document.querySelectorAll('.timeline-dot');
+    const timelineSections = document.querySelectorAll('.timeline');
 
-    if (timelineSection && timelineProgress) {
-        window.addEventListener('scroll', () => {
-            const sectionRect = timelineSection.getBoundingClientRect();
-            const sectionTop = sectionRect.top;
-            const sectionHeight = sectionRect.height;
-            const windowHeight = window.innerHeight;
+    timelineSections.forEach(timelineSection => {
+        const timelineProgress = timelineSection.querySelector('.timeline-progress');
+        const timelineDots = timelineSection.querySelectorAll('.timeline-dot');
 
-            const startOffset = windowHeight / 2;
-            let scrollDistance = startOffset - sectionTop;
+        if (timelineProgress) {
+            window.addEventListener('scroll', () => {
+                const sectionRect = timelineSection.getBoundingClientRect();
+                const sectionTop = sectionRect.top;
+                const sectionHeight = sectionRect.height;
+                const windowHeight = window.innerHeight;
 
+                const startOffset = windowHeight / 2;
+                let scrollDistance = startOffset - sectionTop;
 
-            let progressPercentage = (scrollDistance / sectionHeight) * 100;
+                let progressPercentage = (scrollDistance / sectionHeight) * 100;
+                progressPercentage = Math.max(0, Math.min(100, progressPercentage));
 
+                timelineProgress.style.height = `${progressPercentage}%`;
 
-            progressPercentage = Math.max(0, Math.min(100, progressPercentage));
+                timelineDots.forEach(dot => {
+                    const dotRect = dot.getBoundingClientRect();
+                    const dotTop = dotRect.top;
+                    const lineBottom = timelineProgress.getBoundingClientRect().bottom;
 
-            timelineProgress.style.height = `${progressPercentage}%`;
-
-            timelineDots.forEach(dot => {
-                const dotRect = dot.getBoundingClientRect();
-                const dotTop = dotRect.top;
-                const lineBottom = timelineProgress.getBoundingClientRect().bottom;
-
-                if (lineBottom > dotTop) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
+                    if (lineBottom > dotTop) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
             });
+        }
+    });
+
+    const experienceCards = document.querySelectorAll('.experience-card');
+    experienceCards.forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
         });
-    }
+    });
 
     const backToTopBtn = document.getElementById('backToTop');
 
@@ -191,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData(contactForm);
             const object = Object.fromEntries(formData);
 
-            object.access_key = "68c3204e-747e-4b99-8291-b10a6c1e2a78";
+            object.access_key = CONFIG.WEB3FORMS_ACCESS_KEY;
 
             const json = JSON.stringify(object);
 
