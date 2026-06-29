@@ -1,0 +1,24 @@
+{
+  "name": "devhq-portfolio",
+  "version": "1.0.0",
+  "description": "DevHQ Personal Portfolio Website by Aakarsh Bibhaw",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "npx http-server -p 3000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arshbibhaw/DevHQ-Personal-Portfolio-Website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arshbibhaw/DevHQ-Personal-Portfolio-Website/issues"
+  },
+  "homepage": "https://github.com/arshbibhaw/DevHQ-Personal-Portfolio-Website#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
