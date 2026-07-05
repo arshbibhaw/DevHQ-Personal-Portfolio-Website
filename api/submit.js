@@ -5,28 +5,37 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
-  if (!accessKey) {
-    const availableKeys = Object.keys(process.env).join(', ');
-    return res.status(500).json({ 
-      message: 'Server Configuration Error: Missing API Key',
-      debug_available_env_keys: availableKeys
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const receiverEmail = process.env.RECEIVER_EMAIL;
+
+  if (!resendApiKey || !receiverEmail) {
+    return res.status(500).json({
+      message: 'Server Configuration Error: Missing RESEND_API_KEY or RECEIVER_EMAIL'
     });
   }
 
   try {
+    const { name, email, message } = req.body;
+
     const payload = JSON.stringify({
-      ...req.body,
-      access_key: accessKey,
+      from: 'Portfolio Contact <onboarding@resend.dev>',
+      to: receiverEmail,
+      subject: `New Portfolio Message from ${name}`,
+      html: `
+        <h3>New Contact Form Submission</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong><br/>${message.replace(/\n/g, '<br/>')}</p>
+      `
     });
 
     const options = {
-      hostname: 'api.web3forms.com',
-      path: '/submit',
+      hostname: 'api.resend.com',
+      path: '/emails',
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${resendApiKey}`,
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
         'Content-Length': Buffer.byteLength(payload)
       }
     };
@@ -49,14 +58,14 @@ module.exports = async function handler(req, res) {
       request.end();
     });
 
-    if (data.status === 200) {
-      return res.status(200).json(data.data);
+    if (data.status === 200 || data.status === 201) {
+      return res.status(200).json({ success: true, message: 'Message sent!' });
     } else {
       return res.status(data.status).json(data.data);
     }
   } catch (error) {
-    console.error('Error submitting form:', error);
-    return res.status(500).json({ 
+    console.error('Error submitting form via Resend:', error);
+    return res.status(500).json({
       message: 'Internal Server Error',
       error: error.toString()
     });
