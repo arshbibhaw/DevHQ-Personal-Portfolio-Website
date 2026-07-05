@@ -1,23 +1,22 @@
 
-
 const canvas = document.querySelector('#bg-canvas');
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
-    alpha: true, 
+    alpha: true,
     antialias: true
 });
 
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const starsGeometry = new THREE.BufferGeometry();
 const starsCount = 3200;
 const posArray = new Float32Array(starsCount * 3);
 
 for (let i = 0; i < starsCount * 3; i++) {
-    posArray[i] = (Math.random() - 0.5) * 100; 
+    posArray[i] = (Math.random() - 0.5) * 100;
 }
 
 starsGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
@@ -45,13 +44,13 @@ function createStarTexture() {
 }
 
 const starsMaterial = new THREE.PointsMaterial({
-    size: 0.15, 
+    size: 0.15,
     map: createStarTexture(),
     color: 0xffffff,
     transparent: true,
     opacity: 0.8,
     sizeAttenuation: true,
-    depthWrite: false 
+    depthWrite: false
 });
 
 const starMesh = new THREE.Points(starsGeometry, starsMaterial);
@@ -66,7 +65,7 @@ const windowHalfX = window.innerWidth / 2;
 const windowHalfY = window.innerHeight / 2;
 
 document.addEventListener('mousemove', (event) => {
-    mouseX = (event.clientX - windowHalfX) * 0.0001; 
+    mouseX = (event.clientX - windowHalfX) * 0.0001;
     mouseY = (event.clientY - windowHalfY) * 0.0001;
 });
 
@@ -75,8 +74,8 @@ const clock = new THREE.Clock();
 function animate() {
     const elapsedTime = clock.getElapsedTime();
 
-    starMesh.rotation.y += 0.0001; 
-    starMesh.rotation.x += 0.00005; 
+    starMesh.rotation.y += 0.0001;
+    starMesh.rotation.x += 0.00005;
 
     starMesh.rotation.y += mouseX * 0.5;
     starMesh.rotation.x += mouseY * 0.5;
@@ -94,14 +93,9 @@ window.addEventListener('resize', () => {
 });
 
 
-// ═══════════════════════════════════════════════════════
-// GSAP + ScrollTrigger Animations
-// ═══════════════════════════════════════════════════════
-
 gsap.registerPlugin(ScrollTrigger);
 
 
-// ── Hero: Intro sequence ──
 const hero = document.querySelector('.hero');
 if (hero) {
     const tl = gsap.timeline({ defaults: { ease: "power2.out", duration: 1 } });
@@ -133,11 +127,6 @@ if (hero) {
 }
 
 
-// ═══════════════════════════════════════════════════════
-// SCROLL ANIMATIONS — Projects Section through Contact
-// ═══════════════════════════════════════════════════════
-
-// Helper: Animate all section titles with a fade-up
 document.querySelectorAll('.section-title').forEach(title => {
     gsap.fromTo(title,
         { opacity: 0, y: 40 },
@@ -156,7 +145,6 @@ document.querySelectorAll('.section-title').forEach(title => {
 });
 
 
-// ── Work Experience: Timeline items slide from their side ──
 const timelineItems = document.querySelectorAll('.timeline-item');
 timelineItems.forEach((item) => {
     const isLeft = item.classList.contains('left');
@@ -177,7 +165,6 @@ timelineItems.forEach((item) => {
 });
 
 
-// ── Projects: Cards stagger up from bottom ──
 const projectCards = document.querySelectorAll('.experience-card');
 if (projectCards.length) {
     gsap.fromTo(projectCards,
@@ -199,7 +186,6 @@ if (projectCards.length) {
 }
 
 
-// ── Skills: Cascade ripple reveal ──
 const skillCards = document.querySelectorAll('.skill-grid .skill-card');
 if (skillCards.length) {
     gsap.fromTo(skillCards,
@@ -224,8 +210,6 @@ if (skillCards.length) {
 }
 
 
-
-// ── Contact: Scale-up blur reveal ──
 const contactContainer = document.querySelector('.contact-container');
 if (contactContainer) {
     gsap.fromTo(contactContainer,
@@ -238,6 +222,27 @@ if (contactContainer) {
             ease: "power3.out",
             scrollTrigger: {
                 trigger: contactContainer,
+                start: "top 80%",
+                toggleActions: "play none none reverse"
+            }
+        }
+    );
+}
+
+
+const certItems = document.querySelectorAll('.cert-item');
+if (certItems.length) {
+    gsap.fromTo(certItems,
+        { opacity: 0, scale: 0.92, filter: "blur(8px)" },
+        {
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            duration: 1,
+            ease: "power3.out",
+            stagger: 0.15,
+            scrollTrigger: {
+                trigger: '.cert-grid',
                 start: "top 80%",
                 toggleActions: "play none none reverse"
             }

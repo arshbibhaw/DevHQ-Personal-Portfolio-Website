@@ -22,6 +22,10 @@
     cursor: none;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-dark);
@@ -734,11 +738,6 @@ body {
 }
 
 
-.timeline-item.expanded {
-    opacity: 1;
-    transform: translateY(0);
-}
-
 
 .timeline-content {
     background: rgba(255, 255, 255, 0.05);
@@ -952,17 +951,8 @@ body {
 
     }
 
-    .timeline-item.expanded {
-        transform: none;
-    }
-
-
     .timeline-item {
         transform: translateY(30px);
-    }
-
-    .timeline-item.expanded {
-        transform: translateY(0);
     }
 
 
@@ -1219,6 +1209,20 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    animation: floatProfile 6s infinite ease-in-out;
+}
+
+@keyframes floatProfile {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+        box-shadow: 0 15px 40px rgba(168, 85, 247, 0.4);
+    }
 }
 
 
@@ -1244,6 +1248,15 @@ body {
     object-fit: cover;
     border-radius: 50%;
     border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 3;
+}
+
+.profile-img-main:hover img {
+    transform: scale(1.08) rotate(3deg);
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
 }
 
 .profile-text h2 {
@@ -2136,4 +2149,69 @@ body {
         width: 100%;
         justify-content: center;
     }
+}
+
+.resume-modal {
+    display: none;
+    position: fixed;
+    z-index: 9998;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.resume-modal.show {
+    display: flex;
+    opacity: 1;
+}
+
+.resume-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 1000px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.resume-modal.show .resume-modal-content {
+    transform: scale(1) !important;
+    opacity: 1 !important;
+    filter: blur(0) !important;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #fff;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 2;
+}
+
+.close-modal:hover {
+    color: var(--accent-purple);
+}
+
+.resume-iframe-container {
+    width: 100%;
+    height: 70vh;
+    min-height: 500px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: white;
 }

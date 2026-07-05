@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const observerOptions = {
         root: null,
@@ -244,6 +245,34 @@ document.addEventListener('DOMContentLoaded', () => {
                         btn.style.pointerEvents = 'all';
                     }, 3000);
                 });
+        });
+    }
+
+    const resumeModal = document.getElementById('resumeModal');
+    const openResumeBtn = document.getElementById('openResumeBtn');
+    const closeResumeBtn = document.getElementById('closeResumeBtn');
+    const footerResumeBtn = document.getElementById('footerResumeBtn');
+
+    if (resumeModal && closeResumeBtn) {
+        const openModal = (e) => {
+            if (e) e.preventDefault();
+            resumeModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeModal = () => {
+            resumeModal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        };
+
+        if (openResumeBtn) openResumeBtn.addEventListener('click', openModal);
+        if (footerResumeBtn) footerResumeBtn.addEventListener('click', openModal);
+        closeResumeBtn.addEventListener('click', closeModal);
+
+        resumeModal.addEventListener('click', (e) => {
+            if (e.target === resumeModal) {
+                closeModal();
+            }
         });
     }
 
