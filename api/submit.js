@@ -5,7 +5,11 @@ export default async function handler(req, res) {
 
   const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
   if (!accessKey) {
-    return res.status(500).json({ message: 'Server Configuration Error: Missing API Key' });
+    const availableKeys = Object.keys(process.env).join(', ');
+    return res.status(500).json({ 
+      message: 'Server Configuration Error: Missing API Key',
+      debug_available_env_keys: availableKeys
+    });
   }
 
   try {
