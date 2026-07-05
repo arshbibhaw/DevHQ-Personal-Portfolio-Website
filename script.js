@@ -203,11 +203,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData(contactForm);
             const object = Object.fromEntries(formData);
 
-            object.access_key = CONFIG.WEB3FORMS_ACCESS_KEY;
-
             const json = JSON.stringify(object);
 
-            fetch('https://api.web3forms.com/submit', {
+            fetch('/api/submit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

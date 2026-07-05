@@ -1,9 +1,6 @@
 # Dependencies
 node_modules/
 
-# API Keys & Secrets
-config.js
-
 # Environment files
 .env
 .env.local
