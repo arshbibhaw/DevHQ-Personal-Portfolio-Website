@@ -284,10 +284,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Interactive Skill Filtering ──
     const filterBtns = document.querySelectorAll('.filter-btn');
     const skillCards = document.querySelectorAll('.skill-card[data-category]');
+    let isFiltering = false;
 
     if (filterBtns.length && skillCards.length) {
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
+                if (isFiltering) return;
+                isFiltering = true;
+
                 // Play click sound
                 if (window.soundSystem) window.soundSystem.playClick();
 
@@ -297,30 +301,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const filter = btn.dataset.filter;
 
-                // Phase 1: Hide all cards simultaneously
-                skillCards.forEach(card => {
-                    card.classList.remove('filter-visible');
-                    card.classList.add('filter-hidden');
+                // 1. Sequentially hide all currently visible cards
+                const visibleCards = Array.from(skillCards).filter(card => !card.classList.contains('d-none'));
+
+                visibleCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('filter-hide');
+                    }, index * 30); // staggered fade out
                 });
 
-                // Phase 2: After hide animation completes, show matching cards with stagger
-                setTimeout(() => {
-                    let staggerIndex = 0;
+                // Wait for hide sequence to finish plus a little padding
+                const hideDuration = visibleCards.length * 30 + 300;
 
+                setTimeout(() => {
+                    // 2. Change layout (display:none vs display:flex) while invisible
+                    let cardsToShow = [];
                     skillCards.forEach(card => {
                         const category = card.dataset.category;
+                        const shouldShow = filter === 'all' || category === filter;
 
-                        if (filter === 'all' || category === filter) {
-                            const delay = staggerIndex * 60; // 60ms stagger between each card
-                            staggerIndex++;
+                        // Force transition off for instant layout update
+                        card.style.transition = 'none';
 
-                            setTimeout(() => {
-                                card.classList.remove('filter-hidden');
-                                card.classList.add('filter-visible');
-                            }, delay);
+                        if (shouldShow) {
+                            card.classList.remove('d-none');
+                            card.classList.add('filter-hide'); // stay invisible
+                            cardsToShow.push(card);
+                        } else {
+                            card.classList.add('d-none');
                         }
                     });
-                }, 300); // Wait for hide animation (matches CSS transition duration)
+
+                    // Force reflow
+                    skillCards.forEach(card => void card.offsetWidth);
+
+                    // Restore transitions
+                    skillCards.forEach(card => card.style.transition = '');
+
+                    // 3. Sequentially show new cards
+                    cardsToShow.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.classList.remove('filter-hide');
+                        }, index * 60); // slightly slower staggered fade in
+                    });
+
+                    // 4. Release filtering lock
+                    const showDuration = cardsToShow.length * 60 + 400;
+                    setTimeout(() => {
+                        isFiltering = false;
+                    }, showDuration);
+
+                }, hideDuration);
             });
         });
     }
@@ -351,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
             p.classList.add('preloader-particle');
             p.style.left = Math.random() * 100 + '%';
             p.style.bottom = -(Math.random() * 20) + '%';
-            
+
             // Sync with the ~3.5s DURATION. Duration between 2s and 4s, delay up to 1.5s
             p.style.animationDuration = (2 + Math.random() * 2) + 's';
             p.style.animationDelay = (Math.random() * 1.5) + 's';
@@ -423,4 +454,113 @@ document.addEventListener('DOMContentLoaded', () => {
         const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
         progressBar.style.width = scrollPercent + '%';
     }, { passive: true });
+})();
+
+// ══════════════════════════════════════════
+//  FLOATING NAVBAR — Active Section Tracking
+// ══════════════════════════════════════════
+(function () {
+    const nav = document.getElementById('siteNav');
+    const indicator = document.getElementById('navIndicator');
+    const navLinks = document.querySelectorAll('.nav-link[data-section]');
+    if (!nav || !indicator || !navLinks.length) return;
+
+    const sectionIds = Array.from(navLinks).map(link => link.dataset.section);
+    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+
+    let currentActive = 'home';
+    let navShown = false;
+
+    // ── Position the sliding indicator ──
+    function updateIndicator(activeLink) {
+        if (!activeLink) return;
+        const pill = nav.querySelector('.nav-pill');
+        if (!pill) return;
+
+        const pillRect = pill.getBoundingClientRect();
+        const linkRect = activeLink.getBoundingClientRect();
+
+        const left = linkRect.left - pillRect.left;
+        const width = linkRect.width;
+
+        indicator.style.left = left + 'px';
+        indicator.style.width = width + 'px';
+    }
+
+    // ── Set active link ──
+    function setActive(sectionId) {
+        if (sectionId === currentActive) return;
+        currentActive = sectionId;
+
+        navLinks.forEach(link => {
+            if (link.dataset.section === sectionId) {
+                link.classList.add('active');
+                updateIndicator(link);
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+
+    // ── IntersectionObserver for section tracking ──
+    const observerOptions = {
+        root: null,
+        rootMargin: '-30% 0px -60% 0px',
+        threshold: 0
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                setActive(entry.target.id);
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => sectionObserver.observe(section));
+
+    // ── Show/hide navbar based on scroll position ──
+    const heroSection = document.getElementById('home');
+    let heroHeight = heroSection ? heroSection.offsetHeight : window.innerHeight;
+
+    function checkNavVisibility() {
+        const scrollY = window.scrollY;
+
+        if (scrollY > heroHeight * 0.5 && !navShown) {
+            nav.classList.add('nav-visible');
+            navShown = true;
+            // Initial indicator position
+            requestAnimationFrame(() => {
+                const activeLink = nav.querySelector('.nav-link.active');
+                updateIndicator(activeLink);
+            });
+        } else if (scrollY <= heroHeight * 0.3 && navShown) {
+            nav.classList.remove('nav-visible');
+            navShown = false;
+        }
+    }
+
+    window.addEventListener('scroll', checkNavVisibility, { passive: true });
+
+    // ── Update indicator on resize ──
+    window.addEventListener('resize', () => {
+        heroHeight = heroSection ? heroSection.offsetHeight : window.innerHeight;
+        const activeLink = nav.querySelector('.nav-link.active');
+        updateIndicator(activeLink);
+    });
+
+    // ── Smooth scroll on nav link click ──
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.dataset.section;
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+
+    // Initial check
+    checkNavVisibility();
 })();
