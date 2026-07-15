@@ -1,7 +1,0 @@
-1. Integrate Calendly for Google Meet Scheduling
-
-2. Implement an AI Chatbot or Walkthrough Agent
-
-3. Implement Project and Certifications Filtering
-
-4. 
