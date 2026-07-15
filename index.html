@@ -26,6 +26,39 @@
 </head>
 
 <body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-particles" id="preloaderParticles"></div>
+
+        <!-- Branding -->
+        <div class="preloader-brand">
+            <div class="preloader-brand-main">
+                <span class="preloader-brand-name">Aakarsh</span><span class="preloader-brand-accent">Bibhaw</span>
+            </div>
+            <div class="preloader-brand-subtitle">
+                <span class="subtitle-line"></span>
+                <span>Personal Portfolio</span>
+                <span class="subtitle-line"></span>
+            </div>
+        </div>
+
+        <!-- Sleek Loading Bar -->
+        <div class="preloader-sleek-track">
+            <div class="preloader-sleek-fill" id="preloaderSleekFill"></div>
+        </div>
+
+        <!-- Cycling Tagline -->
+        <div class="preloader-tagline">
+            <span class="tagline-word" style="--w:0">Ideate.</span>
+            <span class="tagline-word" style="--w:1">Design.</span>
+            <span class="tagline-word" style="--w:2">Develop.</span>
+            <span class="tagline-word" style="--w:3">Innovate.</span>
+        </div>
+    </div>
+
     <div class="cursor-dot" data-cursor-dot></div>
     <div class="cursor-outline" data-cursor-outline></div>
 
@@ -209,85 +242,95 @@
 
     <section class="skills-section" id="skills">
         <h2 class="section-title">Technical Skills - <span class="purple-text">Core Expertise!</span></h2>
-        <div class="skill-grid">
 
-            <div class="skill-card">
+        <div class="skill-filters" id="skillFilters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="languages">Languages</button>
+            <button class="filter-btn" data-filter="frontend">Frontend</button>
+            <button class="filter-btn" data-filter="backend">Backend</button>
+            <button class="filter-btn" data-filter="databases">Databases</button>
+            <button class="filter-btn" data-filter="tools">Tools</button>
+        </div>
+
+        <div class="skill-grid" id="skillGrid">
+
+            <div class="skill-card" data-category="languages">
                 <i class="devicon-cplusplus-plain colored"></i>
                 <span>C++</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="languages">
                 <i class="fa-brands fa-python" style="color: #3776AB;"></i>
                 <span>Python</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="languages">
                 <i class="devicon-java-plain colored"></i>
                 <span>Java</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="languages">
                 <i class="devicon-javascript-plain colored"></i>
                 <span>JavaScript</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="frontend">
                 <i class="devicon-html5-plain colored"></i>
                 <span>HTML</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="frontend">
                 <i class="devicon-css3-plain colored"></i>
                 <span>CSS</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="frontend">
                 <i class="devicon-react-original colored"></i>
                 <span>React.js</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="frontend">
                 <i class="devicon-nextjs-plain"></i>
                 <span>Next.js</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="backend">
                 <i class="devicon-nodejs-plain-wordmark colored"></i>
                 <span>Node.js</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="backend">
                 <i class="devicon-express-original"></i>
                 <span>Express.js</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="backend">
                 <i class="devicon-django-plain colored"></i>
                 <span>Django</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="frontend">
                 <i class="devicon-tailwindcss-original colored"></i>
                 <span>Tailwind CSS</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="frontend">
                 <i class="devicon-threejs-original"></i>
                 <span>Three.js</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="databases">
                 <i class="devicon-mongodb-plain colored"></i>
                 <span>MongoDB</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="databases">
                 <i class="devicon-mysql-plain colored"></i>
                 <span>MySQL</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="databases">
                 <i class="devicon-postgresql-plain colored"></i>
                 <span>PostgreSQL</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="tools">
                 <i class="devicon-git-plain colored"></i>
                 <span>Git</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="tools">
                 <i class="devicon-github-original"></i>
                 <span>GitHub</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="tools">
                 <i class="devicon-postman-plain colored"></i>
                 <span>Postman</span>
             </div>
-            <div class="skill-card">
+            <div class="skill-card" data-category="tools">
                 <i class="devicon-vercel-original"></i>
                 <span>Vercel</span>
             </div>
@@ -565,6 +608,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <script src="3d_background.js"></script>
+    <script src="sound.js"></script>
     <script src="script.js"></script>
 </body>
 

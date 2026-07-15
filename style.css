@@ -214,36 +214,40 @@ body {
     top: 20%;
     left: 10%;
     color: #4ade80;
+    opacity: 0;
+}
+.page-loaded .icon-top-left {
     animation: slideInTL 1.5s ease-out forwards, floatIcon 4s infinite ease-in-out 1.5s;
-    opacity: 0;
-
-    opacity: 0;
 }
 
 .icon-top-right {
     top: 20%;
     right: 10%;
     color: #fc8eac;
-
-    color: #fc8eac;
-    animation: slideInTR 1.5s ease-out forwards, floatIcon 4s infinite ease-in-out 1.5s;
     opacity: 0;
+}
+.page-loaded .icon-top-right {
+    animation: slideInTR 1.5s ease-out forwards, floatIcon 4s infinite ease-in-out 1.5s;
 }
 
 .icon-bottom-left {
     bottom: 20%;
     left: 10%;
     color: #38bdf8;
-    animation: slideInBL 1.5s ease-out forwards, floatIcon 4s infinite ease-in-out 1.5s;
     opacity: 0;
+}
+.page-loaded .icon-bottom-left {
+    animation: slideInBL 1.5s ease-out forwards, floatIcon 4s infinite ease-in-out 1.5s;
 }
 
 .icon-bottom-right {
     bottom: 20%;
     right: 10%;
     color: #fbbf24;
-    animation: slideInBR 1.5s ease-out forwards, floatIcon 4s infinite ease-in-out 1.5s;
     opacity: 0;
+}
+.page-loaded .icon-bottom-right {
+    animation: slideInBR 1.5s ease-out forwards, floatIcon 4s infinite ease-in-out 1.5s;
 }
 
 @keyframes slideInTL {
@@ -481,6 +485,79 @@ body {
     text-align: center;
     position: relative;
     z-index: 2;
+}
+
+/* ── Skill Filter Bar ── */
+.skill-filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 50px;
+}
+
+.filter-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #d1d5db;
+    padding: 10px 28px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    border-radius: 50px;
+    letter-spacing: 0.5px;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent-purple), #7c3aed);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    z-index: -1;
+    border-radius: 50px;
+}
+
+.filter-btn:hover {
+    border-color: rgba(168, 85, 247, 0.5);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
+}
+
+.filter-btn.active {
+    border-color: var(--accent-purple);
+    color: #fff;
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.35), inset 0 0 10px rgba(168, 85, 247, 0.15);
+}
+
+.filter-btn.active::before {
+    opacity: 1;
+}
+
+/* ── Skill Card Filter Transitions ── */
+.skill-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.skill-card.filter-hidden {
+    opacity: 0;
+    transform: scale(0.7);
+    pointer-events: none;
+    position: absolute;
+    visibility: hidden;
+}
+
+.skill-card.filter-visible {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+    position: relative;
+    visibility: visible;
 }
 
 .section-title {
@@ -2214,4 +2291,223 @@ body {
     border-radius: 10px;
     overflow: hidden;
     background: white;
+}
+
+.visitor-count {
+    font-size: 0.9rem;
+    margin-top: 5px;
+    color: #d1d5db;
+}
+
+.visitor-count .purple-text {
+    font-weight: 700;
+}
+
+/* ══════════════════════════════════════════
+   SCROLL PROGRESS BAR
+   ══════════════════════════════════════════ */
+.scroll-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #7c3aed, var(--accent-purple), #c084fc);
+    box-shadow: 0 0 10px var(--accent-purple), 0 0 20px rgba(168, 85, 247, 0.3);
+    z-index: 10000;
+    transition: width 0.05s linear;
+    border-radius: 0 2px 2px 0;
+}
+
+/* ══════════════════════════════════════════
+   PRELOADER
+   ══════════════════════════════════════════ */
+.preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    overflow: hidden;
+    transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 1s cubic-bezier(0.4, 0, 0.2, 1),
+                filter 1s cubic-bezier(0.4, 0, 0.2, 1),
+                visibility 1s;
+}
+
+.preloader.loaded {
+    opacity: 0;
+    transform: scale(1.2);
+    filter: blur(20px);
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* ── Floating Particles ── */
+.preloader-particles {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.preloader-particle {
+    position: absolute;
+    background: var(--accent-purple);
+    border-radius: 50%;
+    opacity: 0;
+    /* Animation duration is set dynamically by JS to sync with the 3.5s preloader */
+    animation: particleFloat linear forwards;
+}
+
+@keyframes particleFloat {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0);
+    }
+    15% {
+        opacity: 0.8;
+        transform: translateY(-15vh) scale(1.2);
+    }
+    85% {
+        opacity: 0.4;
+        transform: translateY(-85vh) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-120vh) scale(0.5);
+    }
+}
+
+/* ── Sleek Loading Bar ── */
+.preloader-sleek-track {
+    width: 280px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    z-index: 3;
+    opacity: 0;
+    animation: preloaderFadeIn 0.8s ease 0.4s forwards;
+    margin: 20px 0;
+}
+
+.preloader-sleek-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--accent-purple);
+    border-radius: 4px;
+    box-shadow: 0 0 12px var(--accent-purple), 0 0 24px rgba(168, 85, 247, 0.5);
+    transition: width 0.08s linear;
+}
+
+/* ── Branding ── */
+.preloader-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+    opacity: 0;
+    animation: preloaderFadeIn 0.8s ease 0.2s forwards;
+}
+
+.preloader-brand-main {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+}
+
+.preloader-brand-name {
+    color: #fff;
+}
+
+.preloader-brand-accent {
+    font-family: 'VALORANT', sans-serif;
+    color: var(--accent-purple);
+    font-weight: 400;
+    margin-left: 5px;
+}
+
+.preloader-brand-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.subtitle-line {
+    width: 30px;
+    height: 1px;
+    background: rgba(168, 85, 247, 0.5);
+}
+
+/* ── Cycling Tagline ── */
+.preloader-tagline {
+    display: flex;
+    gap: 20px;
+    z-index: 2;
+    opacity: 0;
+    animation: preloaderFadeIn 0.8s ease 0.8s forwards;
+}
+
+.tagline-word {
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+    animation: taglineCycle 3.2s ease-in-out infinite;
+    animation-delay: calc(var(--w) * 0.8s);
+}
+
+@keyframes taglineCycle {
+    0%, 100% {
+        color: rgba(255, 255, 255, 0.2);
+        text-shadow: none;
+    }
+    25% {
+        color: var(--accent-purple);
+        text-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+    }
+    50% {
+        color: rgba(255, 255, 255, 0.2);
+        text-shadow: none;
+    }
+}
+
+@keyframes preloaderFadeIn {
+    to { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+    .preloader-center {
+        width: 200px;
+        height: 200px;
+    }
+
+    .preloader-percent {
+        font-size: 3.5rem;
+    }
+
+    .preloader-brand {
+        font-size: 1.4rem;
+    }
+
+    .preloader-tagline {
+        gap: 12px;
+    }
+
+    .tagline-word {
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+    }
 }

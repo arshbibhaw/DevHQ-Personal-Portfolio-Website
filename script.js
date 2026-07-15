@@ -54,7 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (typingText) {
-        type();
+        // Wait for preloader to finish before starting the hero animation
+        if (document.getElementById('preloader')) {
+            window.addEventListener('preloaderComplete', type, { once: true });
+        } else {
+            type();
+        }
     }
 
     const cursorDot = document.querySelector('[data-cursor-dot]');
@@ -221,17 +226,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         btn.style.background = 'linear-gradient(90deg, #22c55e, #16a34a, #22c55e)';
                         btn.style.borderColor = '#4ade80';
                         contactForm.reset();
+                        if (window.soundSystem) window.soundSystem.playSuccess();
                     } else {
-
 
                         btn.innerHTML = '<span>Error, Please Retry!</span> <i class="fa-solid fa-triangle-exclamation"></i>';
                         btn.style.background = 'linear-gradient(90deg, #ef4444, #dc2626, #ef4444)';
+                        if (window.soundSystem) window.soundSystem.playError();
                     }
                 })
                 .catch(error => {
 
                     btn.innerHTML = '<span>Error!</span> <i class="fa-solid fa-triangle-exclamation"></i>';
                     btn.style.background = 'linear-gradient(90deg, #ef4444, #dc2626, #ef4444)';
+                    if (window.soundSystem) window.soundSystem.playError();
                 })
                 .finally(() => {
 
@@ -274,4 +281,146 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ── Interactive Skill Filtering ──
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const skillCards = document.querySelectorAll('.skill-card[data-category]');
+
+    if (filterBtns.length && skillCards.length) {
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Play click sound
+                if (window.soundSystem) window.soundSystem.playClick();
+
+                // Update active button
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+
+                // Phase 1: Hide all cards simultaneously
+                skillCards.forEach(card => {
+                    card.classList.remove('filter-visible');
+                    card.classList.add('filter-hidden');
+                });
+
+                // Phase 2: After hide animation completes, show matching cards with stagger
+                setTimeout(() => {
+                    let staggerIndex = 0;
+
+                    skillCards.forEach(card => {
+                        const category = card.dataset.category;
+
+                        if (filter === 'all' || category === filter) {
+                            const delay = staggerIndex * 60; // 60ms stagger between each card
+                            staggerIndex++;
+
+                            setTimeout(() => {
+                                card.classList.remove('filter-hidden');
+                                card.classList.add('filter-visible');
+                            }, delay);
+                        }
+                    });
+                }, 300); // Wait for hide animation (matches CSS transition duration)
+            });
+        });
+    }
+
 });
+
+// ══════════════════════════════════════════
+//  PRELOADER
+// ══════════════════════════════════════════
+// ══════════════════════════════════════════
+//  PRELOADER
+// ══════════════════════════════════════════
+(function () {
+    const preloader = document.getElementById('preloader');
+    const sleekFill = document.getElementById('preloaderSleekFill');
+    const particlesContainer = document.getElementById('preloaderParticles');
+    if (!preloader) return;
+
+    const DURATION = 3500;         // Total animation duration in ms
+    const startTime = performance.now();
+    let pageLoaded = false;
+    let animationDone = false;
+
+    // ── Spawn floating particles ──
+    if (particlesContainer) {
+        for (let i = 0; i < 100; i++) {
+            const p = document.createElement('div');
+            p.classList.add('preloader-particle');
+            p.style.left = Math.random() * 100 + '%';
+            p.style.bottom = -(Math.random() * 20) + '%';
+            
+            // Sync with the ~3.5s DURATION. Duration between 2s and 4s, delay up to 1.5s
+            p.style.animationDuration = (2 + Math.random() * 2) + 's';
+            p.style.animationDelay = (Math.random() * 1.5) + 's';
+            p.style.width = p.style.height = (2 + Math.random() * 4) + 'px';
+            particlesContainer.appendChild(p);
+        }
+    }
+
+    // ── Smooth linear animation via requestAnimationFrame ──
+    function animate(now) {
+        const elapsed = now - startTime;
+        // Ease-out cubic for a natural deceleration feel
+        let t = Math.min(elapsed / DURATION, 1);
+        let easedT = 1 - Math.pow(1 - t, 3);
+
+        // If page has loaded and we're past 80%, accelerate to finish
+        if (pageLoaded && easedT >= 0.8) {
+            easedT = Math.min(easedT + (1 - easedT) * 0.1, 1);
+        }
+
+        // Update loading bar
+        if (sleekFill) {
+            sleekFill.style.width = (easedT * 100) + '%';
+        }
+
+        if (easedT < 1) {
+            requestAnimationFrame(animate);
+        } else {
+            // Reached 100%
+            if (sleekFill) sleekFill.style.width = '100%';
+            animationDone = true;
+            tryDismiss();
+        }
+    }
+
+    requestAnimationFrame(animate);
+
+    // ── Dismiss only when BOTH animation is done AND page is loaded ──
+    function tryDismiss() {
+        if (!animationDone || !pageLoaded) return;
+
+        setTimeout(() => {
+            preloader.classList.add('loaded');
+            setTimeout(() => {
+                preloader.remove();
+                // Dispatch event to tell landing page to start animating
+                document.body.classList.add('page-loaded');
+                window.dispatchEvent(new Event('preloaderComplete'));
+            }, 1000);
+        }, 500);
+    }
+
+    window.addEventListener('load', () => {
+        pageLoaded = true;
+        tryDismiss();
+    });
+})();
+
+// ══════════════════════════════════════════
+//  SCROLL PROGRESS BAR
+// ══════════════════════════════════════════
+(function () {
+    const progressBar = document.getElementById('scrollProgressBar');
+    if (!progressBar) return;
+
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progressBar.style.width = scrollPercent + '%';
+    }, { passive: true });
+})();
