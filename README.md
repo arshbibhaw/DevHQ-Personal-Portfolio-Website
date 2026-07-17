@@ -88,35 +88,6 @@ Instead of exposing API keys in client-side JavaScript, this portfolio employs a
 
 ---
 
-## Setup & Customization
-
-### Local Development
-To run this project locally, including the backend function, you must use the Vercel CLI:
-```bash
-# Install Vercel CLI globally
-npm i -g vercel
-
-# Create a local .env file
-echo "RESEND_API_KEY=your_resend_key" > .env
-echo "RECEIVER_EMAIL=your_email@example.com" >> .env
-
-# Run the dev server
-vercel dev
-```
-
-### Deployment Configuration
-When deploying to Vercel, ensure you add the following Environment Variables in your Vercel Project Settings:
-- `RESEND_API_KEY`: Your private API key from Resend.
-- `RECEIVER_EMAIL`: The email address where contact form submissions should be delivered.
-
-### Three.js Starfield Configuration
-You can tweak the particles in `3d_background.js`:
-```javascript
-const starsCount = 3200; // Increase for denser starfield
-```
-
----
-
 ## Performance Metrics
 
 ### Benchmark Results
