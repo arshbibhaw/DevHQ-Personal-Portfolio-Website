@@ -772,7 +772,7 @@ body {
     height: 0%;
     background: linear-gradient(180deg, var(--accent-purple));
     box-shadow: 0 0 15px var(--accent-purple);
-    transition: height 0.1s linear;
+    transition: height 0.4s ease-out;
 }
 
 .timeline-progress::after {
