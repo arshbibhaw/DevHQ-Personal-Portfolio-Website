@@ -17,7 +17,7 @@
 
 ---
 
-## 🚀 Overview
+## Overview
 
 A cutting-edge personal portfolio featuring a **3D animated starfield background** built with Three.js and professional **scroll-triggered animations** powered by GSAP. This portfolio showcases advanced web technologies including WebGL rendering, custom particle systems, and sophisticated motion design. 
 
@@ -25,25 +25,25 @@ Beyond the frontend, it features a highly secure, **Vercel Serverless Backend** 
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-🌌 **3D WebGL Starfield** - 3,200 interactive particles with mouse parallax  
-🎬 **Premium GSAP Animations** - High-end scroll-triggered staggers and cascading reveals  
-⚡ **Dynamic Typing Animation** - Auto-cycling professional roles  
-🎨 **Custom Cursor System** - Magnetic hover effects with smooth tracking  
-🎯 **3D Card Tilt Effects** - Perspective-based magnetic interactions  
-📍 **Timeline Progress Indicator** - Scroll-synced project timeline  
-🔒 **Serverless Email Backend** - Custom Node.js Vercel function using the Resend API  
-📈 **Advanced SEO** - Fully configured Open Graph & Twitter Cards for social sharing previews  
-🌓 **Glassmorphism Design** - Modern backdrop blur aesthetics  
-📱 **Fully Responsive** - Optimized for all screen sizes  
-⚙️ **Hardware Accelerated** - GPU-powered animations and rendering  
+- **3D WebGL Starfield** - 3,200 interactive particles with mouse parallax  
+- **Premium GSAP Animations** - High-end scroll-triggered staggers and cascading reveals  
+- **Dynamic Typing Animation** - Auto-cycling professional roles  
+- **Custom Cursor System** - Magnetic hover effects with smooth tracking  
+- **3D Card Tilt Effects** - Perspective-based magnetic interactions  
+- **Timeline Progress Indicator** - Scroll-synced project timeline  
+- **Serverless Email Backend** - Custom Node.js Vercel function using the Resend API  
+- **Advanced SEO** - Fully configured Open Graph & Twitter Cards for social sharing previews  
+- **Glassmorphism Design** - Modern backdrop blur aesthetics  
+- **Fully Responsive** - Optimized for all screen sizes  
+- **Hardware Accelerated** - GPU-powered animations and rendering  
 
 ---
 
-## 🎨 Advanced Architecture
+## Advanced Architecture
 
-### 🌟 Three.js 3D Background System
+### Three.js 3D Background System
 **Particle Starfield:**
 - 3,200 procedurally generated stars
 - Custom radial gradient texture for realistic glow
@@ -55,21 +55,21 @@ Beyond the frontend, it features a highly secure, **Vercel Serverless Backend** 
 - Mouse-tracking rotation on X and Y axes
 - Subtle movement for depth perception
 
-### 🎭 GSAP Animation System
+### GSAP Animation System
 **Hero Intro & ScrollTriggers:**
 - Sequenced timeline animations with overlapping tweens (Power2.out easing)
 - **Timeline Items:** Slide in organically from their respective sides
 - **Projects/Skills Grids:** Staggered reveals with a subtle bounce (`back.out`) and wave-like ripple effects
 - **Dynamic Replays:** Uses `toggleActions: "play none none reverse"` to smoothly replay animations when scrolling back up.
 
-### 🔒 Secure Backend Architecture
+### Secure Backend Architecture
 Instead of exposing API keys in client-side JavaScript, this portfolio employs a **Vercel Serverless Function** (`api/submit.js`). 
 - **Hidden Keys:** The frontend sends a clean POST request to `/api/submit`. The serverless function securely injects the `RESEND_API_KEY` from the Vercel Environment Variables, formats the email using HTML, and forwards it to the Resend API.
 - **Node.js Native:** Built using the native `https` module to guarantee runtime stability across all Vercel Node.js environments.
 
 ---
 
-## 🛠️ Technologies
+## Technologies
 
 ### Core Stack
 - **HTML5 & CSS3** - Semantic markup, Grid, Flexbox, Custom Properties
@@ -88,7 +88,7 @@ Instead of exposing API keys in client-side JavaScript, this portfolio employs a
 
 ---
 
-## 🚀 Setup & Customization
+## Setup & Customization
 
 ### Local Development
 To run this project locally, including the backend function, you must use the Vercel CLI:
@@ -117,7 +117,7 @@ const starsCount = 3200; // Increase for denser starfield
 
 ---
 
-## ⚡ Performance Metrics
+## Performance Metrics
 
 ### Benchmark Results
 - **Lighthouse Performance:** 95+
@@ -126,14 +126,14 @@ const starsCount = 3200; // Increase for denser starfield
 - **Total Bundle Size:** ~50KB (excluding CDN)
 
 ### Optimization Techniques
-✅ **WebGL Rendering** - GPU-accelerated graphics  
-✅ **BufferGeometry** - Efficient vertex handling  
-✅ **Pixel Ratio Capping** - Prevents mobile over-rendering  
-✅ **Lazy ScrollTrigger** - On-demand, highly-performant animations  
+- **WebGL Rendering** - GPU-accelerated graphics  
+- **BufferGeometry** - Efficient vertex handling  
+- **Pixel Ratio Capping** - Prevents mobile over-rendering  
+- **Lazy ScrollTrigger** - On-demand, highly-performant animations  
 
 ---
 
-## 📂 File Structure
+## File Structure
 
 ```text
 portfolio/
@@ -152,19 +152,19 @@ portfolio/
 
 ---
 
-## 👤 Author
+## Author
 
 **Aakarsh Bibhaw**  
 CSE Sophomore | Full Stack Developer | WebGL Enthusiast
 
-- 💼 LinkedIn: [@aakarsh-bibhaw](https://linkedin.com/in/aakarsh-bibhaw)
-- 🐙 GitHub: [@arshbibhaw](https://github.com/arshbibhaw)
-- 💻 LeetCode: [@arshbibhaw](https://leetcode.com/arshbibhaw)
-- 🏆 HackerRank: [@arshbibhaw](https://hackerrank.com/arshbibhaw)
+- LinkedIn: [@aakarsh-bibhaw](https://linkedin.com/in/aakarsh-bibhaw)
+- GitHub: [@arshbibhaw](https://github.com/arshbibhaw)
+- LeetCode: [@arshbibhaw](https://leetcode.com/arshbibhaw)
+- HackerRank: [@arshbibhaw](https://hackerrank.com/arshbibhaw)
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Three.js Team** - 3D graphics library
 - **GreenSock (GSAP)** - Animation framework
@@ -175,9 +175,9 @@ CSE Sophomore | Full Stack Developer | WebGL Enthusiast
 
 <div align="center">
   
-  **⭐ Star this repo if you found the 3D effects impressive!**
+  **Star this repo if you found the 3D effects impressive!**
   
-  Made with 💜 by Aakarsh Bibhaw
+  Made by Aakarsh Bibhaw
   
   © 2026 All Rights Reserved
   
