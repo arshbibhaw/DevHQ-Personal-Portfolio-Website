@@ -361,34 +361,51 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ══════════════════════════════════════════
-//  PRELOADER (Brisk 1.2s Duration, Session Cache & Skip Button)
+//  PRELOADER (2.4s Cinematic First Visit with Instant Reload Bypass)
 // ══════════════════════════════════════════
 (function () {
     const preloader = document.getElementById('preloader');
-    const sleekFill = document.getElementById('preloaderSleekFill');
-    const particlesContainer = document.getElementById('preloaderParticles');
-    const skipBtn = document.getElementById('preloaderSkipBtn');
     if (!preloader) return;
+
+    const hasVisited = sessionStorage.getItem('devhq_visited');
+
+    // ── If already visited in this session (e.g. page reload), bypass instantly ──
+    if (hasVisited) {
+        preloader.remove();
+        document.body.classList.add('page-loaded');
+        // Let natural browser scroll restoration keep their current section
+        window.dispatchEvent(new Event('preloaderComplete'));
+        return;
+    }
+
+    // ── First visit in this session: Always start at top and play cinematic sequence ──
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
 
     // Lock body scroll while preloader is active
     document.body.classList.add('preloader-active');
 
-    const hasVisited = sessionStorage.getItem('devhq_visited');
-    const DURATION = hasVisited ? 400 : 1200; // Fast entry for returning visits
+    const sleekFill = document.getElementById('preloaderSleekFill');
+    const particlesContainer = document.getElementById('preloaderParticles');
+    const skipBtn = document.getElementById('preloaderSkipBtn');
+
+    const DURATION = 2400; // Balanced, adequate cinematic duration (~2.4s)
     const startTime = performance.now();
-    let pageLoaded = false;
+    let pageLoaded = document.readyState === 'complete';
     let animationDone = false;
     let dismissed = false;
 
     // Floating particles
-    if (particlesContainer && !hasVisited) {
-        for (let i = 0; i < 40; i++) {
+    if (particlesContainer) {
+        for (let i = 0; i < 45; i++) {
             const p = document.createElement('div');
             p.classList.add('preloader-particle');
             p.style.left = Math.random() * 100 + '%';
             p.style.bottom = -(Math.random() * 20) + '%';
-            p.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
-            p.style.animationDelay = (Math.random() * 0.8) + 's';
+            p.style.animationDuration = (1.8 + Math.random() * 1.5) + 's';
+            p.style.animationDelay = (Math.random() * 1.0) + 's';
             p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
             particlesContainer.appendChild(p);
         }
@@ -415,10 +432,14 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(animate);
 
     function tryDismiss() {
-        if (dismissed || (!animationDone && !hasVisited)) return;
+        if (dismissed || !animationDone) return;
         dismissed = true;
 
         sessionStorage.setItem('devhq_visited', 'true');
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'auto';
+        }
+
         preloader.classList.add('loaded');
         document.body.classList.remove('preloader-active');
         document.body.classList.add('page-loaded');
@@ -426,15 +447,41 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             preloader.remove();
             window.dispatchEvent(new Event('preloaderComplete'));
-        }, 400);
+        }, 500);
+    }
+
+    function forceDismiss() {
+        if (dismissed) return;
+        dismissed = true;
+        animationDone = true;
+
+        sessionStorage.setItem('devhq_visited', 'true');
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'auto';
+        }
+
+        preloader.classList.add('loaded');
+        document.body.classList.remove('preloader-active');
+        document.body.classList.add('page-loaded');
+
+        setTimeout(() => {
+            preloader.remove();
+            window.dispatchEvent(new Event('preloaderComplete'));
+        }, 300);
     }
 
     if (skipBtn) {
         skipBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            tryDismiss();
+            forceDismiss();
         });
     }
+
+    preloader.addEventListener('click', (e) => {
+        if (e.target !== skipBtn) {
+            forceDismiss();
+        }
+    });
 
     window.addEventListener('load', () => {
         pageLoaded = true;
