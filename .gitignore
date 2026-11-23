@@ -14,5 +14,6 @@ Thumbs.db
 .vscode/
 .idea/
 
-# My Ideas about Future Improvisations
-.txt
+# Backups and temporary files
+portfolio_assets/*_orig.*
+  

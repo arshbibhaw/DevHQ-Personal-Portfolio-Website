@@ -60,33 +60,52 @@ camera.position.z = 20;
 
 let mouseX = 0;
 let mouseY = 0;
+let targetX = 0;
+let targetY = 0;
 
-const windowHalfX = window.innerWidth / 2;
-const windowHalfY = window.innerHeight / 2;
+let windowHalfX = window.innerWidth / 2;
+let windowHalfY = window.innerHeight / 2;
 
 document.addEventListener('mousemove', (event) => {
-    mouseX = (event.clientX - windowHalfX) * 0.0001;
-    mouseY = (event.clientY - windowHalfY) * 0.0001;
-});
+    targetX = (event.clientX - windowHalfX) * 0.0003;
+    targetY = (event.clientY - windowHalfY) * 0.0003;
+}, { passive: true });
 
 const clock = new THREE.Clock();
+let isTabVisible = true;
+let animationFrameId = null;
 
 function animate() {
-    const elapsedTime = clock.getElapsedTime();
+    if (!isTabVisible) return;
 
-    starMesh.rotation.y += 0.0001;
-    starMesh.rotation.x += 0.00005;
+    starMesh.rotation.y += 0.00015;
+    starMesh.rotation.x += 0.00008;
 
-    starMesh.rotation.y += mouseX * 0.5;
-    starMesh.rotation.x += mouseY * 0.5;
+    // Smooth subtle parallax easing
+    starMesh.rotation.y += (targetX - (starMesh.rotation.y % 1)) * 0.05;
+    starMesh.rotation.x += (targetY - (starMesh.rotation.x % 1)) * 0.05;
 
     renderer.render(scene, camera);
-    requestAnimationFrame(animate);
+    animationFrameId = requestAnimationFrame(animate);
 }
+
+// ── Pause rendering when tab is hidden to save GPU/battery ──
+document.addEventListener('visibilitychange', () => {
+    isTabVisible = !document.hidden;
+    if (isTabVisible) {
+        clock.start();
+        animate();
+    } else if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+});
 
 animate();
 
 window.addEventListener('resize', () => {
+    windowHalfX = window.innerWidth / 2;
+    windowHalfY = window.innerHeight / 2;
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -96,8 +115,10 @@ window.addEventListener('resize', () => {
 gsap.registerPlugin(ScrollTrigger);
 
 
-const hero = document.querySelector('.hero');
-if (hero) {
+function initHeroAnimation() {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+
     const tl = gsap.timeline({ defaults: { ease: "power2.out", duration: 1 } });
 
     tl.fromTo(".sub-title",
@@ -124,6 +145,13 @@ if (hero) {
             { opacity: 1, x: 0 },
             "<"
         );
+}
+
+// ── Sync hero entrance animation with preloader completion ──
+if (document.getElementById('preloader')) {
+    window.addEventListener('preloaderComplete', initHeroAnimation, { once: true });
+} else {
+    initHeroAnimation();
 }
 
 

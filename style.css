@@ -1,6 +1,3 @@
-@import url('https://fonts.cdnfonts.com/css/valorant');
-
-
 @property --angle {
     syntax: '<angle>';
     initial-value: 0deg;
@@ -19,7 +16,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    cursor: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    * {
+        cursor: none;
+    }
 }
 
 html {
@@ -30,23 +32,33 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-dark);
     color: var(--text-white);
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
+    min-height: 100vh;
+    overflow-x: hidden;
     position: relative;
 }
 
+body.preloader-active {
+    overflow: hidden !important;
+    height: 100vh !important;
+}
 
 .cursor-dot,
 .cursor-outline {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
-    transform: translate(-50%, -50%);
     border-radius: 50%;
     z-index: 9999;
     pointer-events: none;
+    will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .cursor-dot,
+    .cursor-outline {
+        display: block;
+    }
 }
 
 .cursor-dot {
@@ -382,20 +394,7 @@ body {
 
     z-index: 2;
     position: relative;
-
 }
-
-
-body {
-    overflow-y: auto;
-
-    overflow-x: hidden;
-    height: auto;
-    display: block;
-
-}
-
-
 
 .hero {
     margin: 0 auto;
@@ -2654,4 +2653,59 @@ body {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border-width: 0;
+}
+
+/* ── Preloader Skip Button ── */
+.preloader-skip-btn {
+    margin-top: 25px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #d1d5db;
+    padding: 8px 22px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: 'Inter', sans-serif;
+    z-index: 10;
+}
+
+.preloader-skip-btn:hover {
+    background: rgba(168, 85, 247, 0.2);
+    border-color: var(--accent-purple);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* ── Contact Form Status Feedback ── */
+.form-status {
+    font-size: 0.9rem;
+    margin-top: 12px;
+    text-align: center;
+    min-height: 1.2em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.form-status.success {
+    color: #4ade80;
+}
+
+.form-status.error {
+    color: #f87171;
+}
+
+/* ── Accessible Reduced Motion Support ── */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    .cursor-outline,
+    .cursor-dot {
+        display: none !important;
+    }
 }

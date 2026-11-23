@@ -1,12 +1,13 @@
 
 document.addEventListener('DOMContentLoaded', () => {
+    // ── Intersection Observer for About Card Reveal ──
     const observerOptions = {
         root: null,
         rootMargin: '0px',
         threshold: 0.3
     };
 
-    const observer = new IntersectionObserver((entries, observer) => {
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('expanded');
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollElements = document.querySelectorAll('.about-section .scroll-reveal');
     scrollElements.forEach(el => observer.observe(el));
 
+    // ── Typing Animation ──
     const typingText = document.getElementById('typing-text');
     const words = ["DEVELOPER", "DESIGNER", "PROGRAMMER", "WRITER", "CODER"];
     let wordIndex = 0;
@@ -62,64 +64,85 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // ── Hardware-Accelerated Custom Cursor (Fine Pointers Only) ──
+    const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const cursorDot = document.querySelector('[data-cursor-dot]');
     const cursorOutline = document.querySelector('[data-cursor-outline]');
 
-    window.addEventListener('mousemove', function (e) {
-        const posX = e.clientX;
-        const posY = e.clientY;
+    if (isFinePointer && cursorDot && cursorOutline) {
+        let mouseX = -100;
+        let mouseY = -100;
+        let outlineX = -100;
+        let outlineY = -100;
 
-        cursorDot.style.left = `${posX}px`;
-        cursorDot.style.top = `${posY}px`;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+        }, { passive: true });
 
-        cursorOutline.animate({
-            left: `${posX}px`,
-            top: `${posY}px`
-        }, { duration: 500, fill: "forwards" });
-    });
-
-    const interactables = document.querySelectorAll('a, button, .floating-icon');
-    interactables.forEach(el => {
-        el.addEventListener('mouseenter', () => cursorOutline.classList.add('hovered'));
-        el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hovered'));
-    });
-
-    const timelineSections = document.querySelectorAll('.timeline');
-
-    timelineSections.forEach(timelineSection => {
-        const timelineProgress = timelineSection.querySelector('.timeline-progress');
-        const timelineDots = timelineSection.querySelectorAll('.timeline-dot');
-
-        if (timelineProgress) {
-            window.addEventListener('scroll', () => {
-                const sectionRect = timelineSection.getBoundingClientRect();
-                const sectionTop = sectionRect.top;
-                const sectionHeight = sectionRect.height;
-                const windowHeight = window.innerHeight;
-
-                const startOffset = windowHeight / 2;
-                let scrollDistance = startOffset - sectionTop;
-
-                let progressPercentage = (scrollDistance / sectionHeight) * 100;
-                progressPercentage = Math.max(0, Math.min(100, progressPercentage));
-
-                timelineProgress.style.height = `${progressPercentage}%`;
-
-                timelineDots.forEach(dot => {
-                    const dotRect = dot.getBoundingClientRect();
-                    const dotTop = dotRect.top;
-                    const lineBottom = timelineProgress.getBoundingClientRect().bottom;
-
-                    if (lineBottom > dotTop) {
-                        dot.classList.add('active');
-                    } else {
-                        dot.classList.remove('active');
-                    }
-                });
-            });
+        function renderCursor() {
+            outlineX += (mouseX - outlineX) * 0.18;
+            outlineY += (mouseY - outlineY) * 0.18;
+            cursorOutline.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) translate(-50%, -50%)`;
+            requestAnimationFrame(renderCursor);
         }
-    });
+        requestAnimationFrame(renderCursor);
 
+        const interactables = document.querySelectorAll('a, button, .floating-icon, .filter-btn, .project-btn, .profile-card, .cert-item');
+        interactables.forEach(el => {
+            el.addEventListener('mouseenter', () => cursorOutline.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hovered'));
+        });
+    }
+
+    // ── Throttled Scroll Listener for Timeline (Eliminates Layout Thrashing) ──
+    const timelineSections = document.querySelectorAll('.timeline');
+    if (timelineSections.length) {
+        let timelineTicking = false;
+
+        function updateTimelines() {
+            timelineSections.forEach(timelineSection => {
+                const timelineProgress = timelineSection.querySelector('.timeline-progress');
+                const timelineDots = timelineSection.querySelectorAll('.timeline-dot');
+
+                if (timelineProgress) {
+                    const sectionRect = timelineSection.getBoundingClientRect();
+                    const sectionTop = sectionRect.top;
+                    const sectionHeight = sectionRect.height;
+                    const windowHeight = window.innerHeight;
+
+                    const startOffset = windowHeight / 2;
+                    let scrollDistance = startOffset - sectionTop;
+
+                    let progressPercentage = (scrollDistance / sectionHeight) * 100;
+                    progressPercentage = Math.max(0, Math.min(100, progressPercentage));
+
+                    timelineProgress.style.height = `${progressPercentage}%`;
+
+                    const lineBottom = timelineProgress.getBoundingClientRect().bottom;
+                    timelineDots.forEach(dot => {
+                        const dotTop = dot.getBoundingClientRect().top;
+                        if (lineBottom > dotTop) {
+                            dot.classList.add('active');
+                        } else {
+                            dot.classList.remove('active');
+                        }
+                    });
+                }
+            });
+            timelineTicking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!timelineTicking) {
+                requestAnimationFrame(updateTimelines);
+                timelineTicking = true;
+            }
+        }, { passive: true });
+    }
+
+    // ── Experience Card Radial Glow ──
     const experienceCards = document.querySelectorAll('.experience-card');
     experienceCards.forEach(card => {
         card.addEventListener('mousemove', e => {
@@ -128,11 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const y = e.clientY - rect.top;
             card.style.setProperty('--mouse-x', `${x}px`);
             card.style.setProperty('--mouse-y', `${y}px`);
-        });
+        }, { passive: true });
     });
 
+    // ── Back to Top Button ──
     const backToTopBtn = document.getElementById('backToTop');
-
     if (backToTopBtn) {
         backToTopBtn.addEventListener('click', () => {
             window.scrollTo({
@@ -147,13 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 backToTopBtn.classList.remove('bounce');
             }
-        });
+        }, { passive: true });
     }
 
+    // ── 3D About Card Tilt ──
     const aboutCard = document.querySelector('.glass-card');
-    if (aboutCard) {
+    if (aboutCard && isFinePointer) {
         aboutCard.addEventListener('mousemove', (e) => {
-
             if (!aboutCard.classList.contains('expanded')) return;
 
             const rect = aboutCard.getBoundingClientRect();
@@ -174,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             aboutCard.style.transition = 'transform 0.1s ease-out';
             aboutCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-        });
+        }, { passive: true });
 
         aboutCard.addEventListener('mouseleave', () => {
             if (!aboutCard.classList.contains('expanded')) return;
@@ -193,22 +216,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ── Contact Form Submission Handling ──
     const contactForm = document.getElementById('contactForm');
+    const formStatus = document.getElementById('formStatus');
+
     if (contactForm) {
         contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
-            const btn = contactForm.querySelector('button');
+            const btn = contactForm.querySelector('button[type="submit"]');
             const originalText = btn.innerHTML;
 
             btn.innerHTML = '<span>Sending...</span> <i class="fa-solid fa-spinner fa-spin"></i>';
             btn.style.opacity = '0.7';
             btn.style.pointerEvents = 'none';
 
-            const formData = new FormData(contactForm);
-            const object = Object.fromEntries(formData);
+            if (formStatus) {
+                formStatus.textContent = '';
+                formStatus.className = 'form-status';
+            }
 
-            const json = JSON.stringify(object);
+            const formData = new FormData(contactForm);
+            const payload = Object.fromEntries(formData);
 
             fetch('/api/submit', {
                 method: 'POST',
@@ -216,43 +245,49 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                body: json
+                body: JSON.stringify(payload)
             })
                 .then(async (response) => {
-                    let json = await response.json();
-                    if (response.status == 200) {
-
+                    let result = await response.json();
+                    if (response.status === 200 || response.status === 201) {
                         btn.innerHTML = '<span>Message Delivered!</span> <i class="fa-solid fa-check"></i>';
                         btn.style.background = 'linear-gradient(90deg, #22c55e, #16a34a, #22c55e)';
                         btn.style.borderColor = '#4ade80';
+                        if (formStatus) {
+                            formStatus.textContent = 'Thank you! Your message has been sent successfully.';
+                            formStatus.className = 'form-status success';
+                        }
                         contactForm.reset();
-                        if (window.soundSystem) window.soundSystem.playSuccess();
                     } else {
-
                         btn.innerHTML = '<span>Error, Please Retry!</span> <i class="fa-solid fa-triangle-exclamation"></i>';
                         btn.style.background = 'linear-gradient(90deg, #ef4444, #dc2626, #ef4444)';
-                        if (window.soundSystem) window.soundSystem.playError();
+                        if (formStatus) {
+                            formStatus.textContent = result.message || 'Error sending message. Please retry.';
+                            formStatus.className = 'form-status error';
+                        }
                     }
                 })
-                .catch(error => {
-
+                .catch(() => {
                     btn.innerHTML = '<span>Error!</span> <i class="fa-solid fa-triangle-exclamation"></i>';
                     btn.style.background = 'linear-gradient(90deg, #ef4444, #dc2626, #ef4444)';
-                    if (window.soundSystem) window.soundSystem.playError();
+                    if (formStatus) {
+                        formStatus.textContent = 'Network error. Please check your connection and try again.';
+                        formStatus.className = 'form-status error';
+                    }
                 })
                 .finally(() => {
-
                     setTimeout(() => {
                         btn.innerHTML = originalText;
                         btn.style.background = '';
                         btn.style.borderColor = '';
                         btn.style.opacity = '1';
                         btn.style.pointerEvents = 'all';
-                    }, 3000);
+                    }, 4000);
                 });
         });
     }
 
+    // ── Resume Modal with Keyboard Accessibility ──
     const resumeModal = document.getElementById('resumeModal');
     const openResumeBtn = document.getElementById('openResumeBtn');
     const closeResumeBtn = document.getElementById('closeResumeBtn');
@@ -263,11 +298,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e) e.preventDefault();
             resumeModal.classList.add('show');
             document.body.style.overflow = 'hidden';
+            closeResumeBtn.focus();
         };
 
         const closeModal = () => {
             resumeModal.classList.remove('show');
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = '';
+            if (openResumeBtn) openResumeBtn.focus();
         };
 
         if (openResumeBtn) openResumeBtn.addEventListener('click', openModal);
@@ -279,128 +316,90 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeModal();
             }
         });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && resumeModal.classList.contains('show')) {
+                closeModal();
+            }
+        });
     }
 
-    // ── Interactive Skill Filtering ──
+    // ── Fast, Non-Blocking Skill Filtering (250ms Snappy Transitions) ──
     const filterBtns = document.querySelectorAll('.filter-btn');
     const skillCards = document.querySelectorAll('.skill-card[data-category]');
-    let isFiltering = false;
 
     if (filterBtns.length && skillCards.length) {
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                if (isFiltering) return;
-                isFiltering = true;
-
-                // Play click sound
-                if (window.soundSystem) window.soundSystem.playClick();
-
-                // Update active button
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
                 const filter = btn.dataset.filter;
 
-                // 1. Sequentially hide all currently visible cards
-                const visibleCards = Array.from(skillCards).filter(card => !card.classList.contains('d-none'));
+                skillCards.forEach(card => {
+                    const category = card.dataset.category;
+                    const shouldShow = filter === 'all' || category === filter;
 
-                visibleCards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.classList.add('filter-hide');
-                    }, index * 30); // staggered fade out
-                });
-
-                // Wait for hide sequence to finish plus a little padding
-                const hideDuration = visibleCards.length * 30 + 300;
-
-                setTimeout(() => {
-                    // 2. Change layout (display:none vs display:flex) while invisible
-                    let cardsToShow = [];
-                    skillCards.forEach(card => {
-                        const category = card.dataset.category;
-                        const shouldShow = filter === 'all' || category === filter;
-
-                        // Force transition off for instant layout update
-                        card.style.transition = 'none';
-
-                        if (shouldShow) {
-                            card.classList.remove('d-none');
-                            card.classList.add('filter-hide'); // stay invisible
-                            cardsToShow.push(card);
-                        } else {
-                            card.classList.add('d-none');
-                        }
-                    });
-
-                    // Force reflow
-                    skillCards.forEach(card => void card.offsetWidth);
-
-                    // Restore transitions
-                    skillCards.forEach(card => card.style.transition = '');
-
-                    // 3. Sequentially show new cards
-                    cardsToShow.forEach((card, index) => {
-                        setTimeout(() => {
+                    if (shouldShow) {
+                        card.classList.remove('d-none');
+                        requestAnimationFrame(() => {
                             card.classList.remove('filter-hide');
-                        }, index * 60); // slightly slower staggered fade in
-                    });
-
-                    // 4. Release filtering lock
-                    const showDuration = cardsToShow.length * 60 + 400;
-                    setTimeout(() => {
-                        isFiltering = false;
-                    }, showDuration);
-
-                }, hideDuration);
+                        });
+                    } else {
+                        card.classList.add('filter-hide');
+                        setTimeout(() => {
+                            if (card.classList.contains('filter-hide')) {
+                                card.classList.add('d-none');
+                            }
+                        }, 250);
+                    }
+                });
             });
         });
     }
-
 });
 
 // ══════════════════════════════════════════
-//  PRELOADER
+//  PRELOADER (Brisk 1.2s Duration, Session Cache & Skip Button)
 // ══════════════════════════════════════════
 (function () {
     const preloader = document.getElementById('preloader');
     const sleekFill = document.getElementById('preloaderSleekFill');
     const particlesContainer = document.getElementById('preloaderParticles');
+    const skipBtn = document.getElementById('preloaderSkipBtn');
     if (!preloader) return;
 
-    const DURATION = 3500;         // Total animation duration in ms
+    // Lock body scroll while preloader is active
+    document.body.classList.add('preloader-active');
+
+    const hasVisited = sessionStorage.getItem('devhq_visited');
+    const DURATION = hasVisited ? 400 : 1200; // Fast entry for returning visits
     const startTime = performance.now();
     let pageLoaded = false;
     let animationDone = false;
+    let dismissed = false;
 
-    // ── Spawn floating particles ──
-    if (particlesContainer) {
-        for (let i = 0; i < 100; i++) {
+    // Floating particles
+    if (particlesContainer && !hasVisited) {
+        for (let i = 0; i < 40; i++) {
             const p = document.createElement('div');
             p.classList.add('preloader-particle');
             p.style.left = Math.random() * 100 + '%';
             p.style.bottom = -(Math.random() * 20) + '%';
-
-            // Sync with the ~3.5s DURATION. Duration between 2s and 4s, delay up to 1.5s
-            p.style.animationDuration = (2 + Math.random() * 2) + 's';
-            p.style.animationDelay = (Math.random() * 1.5) + 's';
-            p.style.width = p.style.height = (2 + Math.random() * 4) + 'px';
+            p.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+            p.style.animationDelay = (Math.random() * 0.8) + 's';
+            p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
             particlesContainer.appendChild(p);
         }
     }
 
-    // ── Smooth linear animation via requestAnimationFrame ──
     function animate(now) {
+        if (dismissed) return;
         const elapsed = now - startTime;
-        // Ease-out cubic for a natural deceleration feel
         let t = Math.min(elapsed / DURATION, 1);
         let easedT = 1 - Math.pow(1 - t, 3);
 
-        // If page has loaded and we're past 80%, accelerate to finish
-        if (pageLoaded && easedT >= 0.8) {
-            easedT = Math.min(easedT + (1 - easedT) * 0.1, 1);
-        }
-
-        // Update loading bar
         if (sleekFill) {
             sleekFill.style.width = (easedT * 100) + '%';
         }
@@ -408,8 +407,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (easedT < 1) {
             requestAnimationFrame(animate);
         } else {
-            // Reached 100%
-            if (sleekFill) sleekFill.style.width = '100%';
             animationDone = true;
             tryDismiss();
         }
@@ -417,24 +414,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     requestAnimationFrame(animate);
 
-    // ── Dismiss only when BOTH animation is done AND page is loaded ──
     function tryDismiss() {
-        if (!animationDone || !pageLoaded) return;
+        if (dismissed || (!animationDone && !hasVisited)) return;
+        dismissed = true;
+
+        sessionStorage.setItem('devhq_visited', 'true');
+        preloader.classList.add('loaded');
+        document.body.classList.remove('preloader-active');
+        document.body.classList.add('page-loaded');
 
         setTimeout(() => {
-            preloader.classList.add('loaded');
-            setTimeout(() => {
-                preloader.remove();
-                // Dispatch event to tell landing page to start animating
-                document.body.classList.add('page-loaded');
-                window.dispatchEvent(new Event('preloaderComplete'));
-            }, 1000);
-        }, 500);
+            preloader.remove();
+            window.dispatchEvent(new Event('preloaderComplete'));
+        }, 400);
+    }
+
+    if (skipBtn) {
+        skipBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            tryDismiss();
+        });
     }
 
     window.addEventListener('load', () => {
         pageLoaded = true;
-        tryDismiss();
+        if (animationDone) tryDismiss();
     });
 })();
 
@@ -468,7 +472,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentActive = 'home';
     let navShown = false;
 
-    // ── Position the sliding indicator ──
     function updateIndicator(activeLink) {
         if (!activeLink) return;
         const pill = nav.querySelector('.nav-pill');
@@ -484,7 +487,6 @@ document.addEventListener('DOMContentLoaded', () => {
         indicator.style.width = width + 'px';
     }
 
-    // ── Set active link ──
     function setActive(sectionId) {
         if (sectionId === currentActive) return;
         currentActive = sectionId;
@@ -499,7 +501,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── IntersectionObserver for section tracking ──
     const observerOptions = {
         root: null,
         rootMargin: '-30% 0px -60% 0px',
@@ -516,22 +517,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sections.forEach(section => sectionObserver.observe(section));
 
-    // ── Show/hide navbar based on scroll position ──
     const heroSection = document.getElementById('home');
     let heroHeight = heroSection ? heroSection.offsetHeight : window.innerHeight;
 
     function checkNavVisibility() {
         const scrollY = window.scrollY;
 
-        if (scrollY > heroHeight * 0.5 && !navShown) {
+        if (scrollY > heroHeight * 0.4 && !navShown) {
             nav.classList.add('nav-visible');
             navShown = true;
-            // Initial indicator position
             requestAnimationFrame(() => {
                 const activeLink = nav.querySelector('.nav-link.active');
                 updateIndicator(activeLink);
             });
-        } else if (scrollY <= heroHeight * 0.3 && navShown) {
+        } else if (scrollY <= heroHeight * 0.25 && navShown) {
             nav.classList.remove('nav-visible');
             navShown = false;
         }
@@ -539,14 +538,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', checkNavVisibility, { passive: true });
 
-    // ── Update indicator on resize ──
     window.addEventListener('resize', () => {
         heroHeight = heroSection ? heroSection.offsetHeight : window.innerHeight;
         const activeLink = nav.querySelector('.nav-link.active');
         updateIndicator(activeLink);
     });
 
-    // ── Smooth scroll on nav link click ──
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -558,6 +555,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Initial check
     checkNavVisibility();
 })();

@@ -13,21 +13,42 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="Aakarsh | DevHQ">
     <meta property="og:description" content="Explore my projects, work experience, and technical skills.">
-    <meta property="og:image"
-        content="https://raw.githubusercontent.com/arshbibhaw/DevHQ-Personal-Portfolio-Website/main/portfolio_assets/DevHQ_Favicon.jpg">
+    <meta property="og:image" content="https://raw.githubusercontent.com/arshbibhaw/DevHQ-Personal-Portfolio-Website/main/portfolio_assets/Aakarsh-DevHQ.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Aakarsh | DevHQ">
     <meta name="twitter:description" content="Explore my projects, work experience, and technical skills.">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/arshbibhaw/DevHQ-Personal-Portfolio-Website/main/portfolio_assets/DevHQ_Favicon.jpg">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/arshbibhaw/DevHQ-Personal-Portfolio-Website/main/portfolio_assets/Aakarsh-DevHQ.png">
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Aakarsh Bibhaw",
+      "url": "https://aakarsh-devhq.vercel.app/",
+      "jobTitle": "Software Developer & Computer Science Undergraduate",
+      "sameAs": [
+        "https://linkedin.com/in/aakarsh-bibhaw",
+        "https://github.com/arshbibhaw",
+        "https://leetcode.com/arshbibhaw",
+        "https://hackerrank.com/arshbibhaw"
+      ],
+      "description": "Personal Portfolio of Aakarsh Bibhaw, CSE Undergraduate, Full Stack Developer, and WebGL Enthusiast."
+    }
+    </script>
 
     <link rel="icon" href="portfolio_assets/DevHQ_Favicon.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/valorant">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
-    <script type="module" src="./speed-insights.js"></script>
 </head>
 
 <body>
@@ -101,6 +122,8 @@
             <span class="tagline-word" style="--w:2">Develop.</span>
             <span class="tagline-word" style="--w:3">Innovate.</span>
         </div>
+
+        <button class="preloader-skip-btn" id="preloaderSkipBtn" aria-label="Skip preloader animation">Skip Intro &rarr;</button>
     </div>
 
     <div class="cursor-dot" data-cursor-dot></div>
@@ -127,21 +150,16 @@
         </div>
 
         <div class="content-wrapper">
-            <h2 class="sub-title">Woah! You Landed on the Portfolio Website of The</h2>
-            <br>
-            <br>
-            <h1 class="sr-only">Aakarsh Bibhaw - Software Developer Portfolio</h1>
-            <h2 class="main-title">
-                <span class="purple-text" id="typing-text"></span>
-            </h2>
-            <br>
-            <br>
-            <h5 class="year">Aakarsh Bibhaw | CSE Undergrad</h5>
-            <br>
+            <p class="sub-title">Woah! You Landed on the Portfolio Website of The</p>
+            <h1 class="main-title">
+                <span class="purple-text" id="typing-text">DEVELOPER</span>
+            </h1>
+            <p class="year">Aakarsh Bibhaw | CSE Undergrad</p>
             <div class="hero-buttons">
                 <a href="https://linkedin.com/in/aakarsh-bibhaw" target="_blank" class="btn-resume">Let's Connect</a>
                 <a href="javascript:void(0)" id="openResumeBtn" class="btn-resume">View Resume</a>
             </div>
+        </div>
         </div>
     </main>
 
@@ -175,7 +193,7 @@
                 <div class="timeline-number">01</div>
                 <div class="timeline-content">
                     <div class="project-tag">Snooozeit Pvt. Ltd.</div>
-                    <img src="portfolio_assets/Snoozeit_Icon.jpg" alt="Snooozeit Logo" class="company-logo">
+                    <img src="portfolio_assets/Snoozeit_Icon.jpg" alt="Snooozeit Logo" class="company-logo" width="512" height="512" loading="lazy" decoding="async">
                     <h3>Software Development Engineer Intern</h3>
                     <p style="text-align: left; padding: 10px 0;">
                         • Developing and maintaining software applications while writing clean, scalable, and efficient
@@ -192,7 +210,7 @@
                 <div class="timeline-number">02</div>
                 <div class="timeline-content">
                     <div class="project-tag">CollegeDunia Pvt. Ltd.</div>
-                    <img src="portfolio_assets/Collegedunia_Icon.png" alt="CollegeDunia Logo" class="company-logo">
+                    <img src="portfolio_assets/Collegedunia_Icon.png" alt="CollegeDunia Logo" class="company-logo" width="512" height="512" loading="lazy" decoding="async">
                     <h3>Content Developer Intern</h3>
                     <p style="text-align: left; padding: 10px 0;">
                         • Managed production-stage content using HTML and LaTeX, ensuring accurate rendering across CMS
@@ -409,7 +427,7 @@
 
             <div class="cert-item">
                 <div class="cert-img-wrapper">
-                    <img src="portfolio_assets/HackHatch_Certificate.png" alt="HackHatch: The Startup Hackathon">
+                    <img src="portfolio_assets/HackHatch_Certificate.png" alt="HackHatch: The Startup Hackathon" width="2000" height="1414" loading="lazy" decoding="async">
                     <div class="cert-overlay">
                         <a href="https://drive.google.com/file/d/1cLeGzJsHZ7rgJoGyZQvSstIsPeZ4IAOb/view?usp=sharing"
                             target="_blank" class="cert-overlay-link">
@@ -429,7 +447,7 @@
             <div class="cert-item">
                 <div class="cert-img-wrapper">
                     <img src="portfolio_assets/Deloitte_Data_Analytics_Certificate.jpg"
-                        alt="Deloitte: Data Analytics Simulation">
+                        alt="Deloitte: Data Analytics Simulation" width="1755" height="1240" loading="lazy" decoding="async">
                     <div class="cert-overlay">
                         <a href="https://drive.google.com/file/d/1_zaiiUSxKRVZ7kL4U_BDffjc3SPpKpqR/view?usp=drive_link"
                             target="_blank" class="cert-overlay-link">
@@ -447,7 +465,7 @@
 
             <div class="cert-item">
                 <div class="cert-img-wrapper">
-                    <img src="portfolio_assets/AI_Fluency_Builder_Certificate.jpg" alt="Anthropic AI Fluency Builder">
+                    <img src="portfolio_assets/AI_Fluency_Builder_Certificate.jpg" alt="Anthropic AI Fluency Builder" width="3300" height="2550" loading="lazy" decoding="async">
                     <div class="cert-overlay">
                         <a href="https://verify.skilljar.com/c/z8wpz9cyhbvh" target="_blank" class="cert-overlay-link">
                             <span>View Credentials</span>
@@ -467,7 +485,7 @@
 
             <div class="cert-item">
                 <div class="cert-img-wrapper">
-                    <img src="portfolio_assets/AI_Fluency_FF_Certificate.jpg" alt="Anthropic AI Fluency F&F">
+                    <img src="portfolio_assets/AI_Fluency_FF_Certificate.jpg" alt="Anthropic AI Fluency F&F" width="3300" height="2550" loading="lazy" decoding="async">
                     <div class="cert-overlay">
                         <a href="https://verify.skilljar.com/c/jcaxggkjjy27" target="_blank" class="cert-overlay-link">
                             <span>View Credentials</span>
@@ -486,7 +504,7 @@
 
             <div class="cert-item">
                 <div class="cert-img-wrapper">
-                    <img src="portfolio_assets/AI_Fluency_CL_Certificate.jpg" alt="Anthropic AI Fluency C&L">
+                    <img src="portfolio_assets/AI_Fluency_CL_Certificate.jpg" alt="Anthropic AI Fluency C&L" width="3300" height="2550" loading="lazy" decoding="async">
                     <div class="cert-overlay">
                         <a href="https://verify.skilljar.com/c/hasftoxptzgd" target="_blank" class="cert-overlay-link">
                             <span>View Credentials</span>
@@ -505,7 +523,7 @@
             <div class="cert-item">
                 <div class="cert-img-wrapper">
                     <img src="portfolio_assets/Hackerrank_SQL_Intermediate_Certificate.jpg"
-                        alt="HackerRank SQL Intermediate">
+                        alt="HackerRank SQL Intermediate" width="2481" height="1890" loading="lazy" decoding="async">
                     <div class="cert-overlay">
                         <a href="https://drive.google.com/file/d/1SzwC8ZvCaloBbZkS_fdZLePhqu-Ng8Al/view?usp=drive_link"
                             target="_blank" class="cert-overlay-link">
@@ -530,7 +548,7 @@
         <h2 class="section-title">Web Presence - <span class="purple-text">Dev Network!</span></h2>
         <div class="profile-header">
             <div class="profile-img-main">
-                <img src="portfolio_assets/Professional_Picture.jpg" alt="Aakarsh Bibhaw">
+                <img src="portfolio_assets/Professional_Picture.jpg" alt="Aakarsh Bibhaw" width="600" height="741" loading="lazy" decoding="async">
             </div>
             <div class="profile-text">
                 <p class="purple-text">@arshbibhaw</p>
@@ -592,21 +610,26 @@
                 opportunities and interesting conversations.</h4>
             <div class="contact-card">
                 <form id="contactForm" class="contact-form">
+                    <!-- Anti-Spam Honeypot Field -->
+                    <div class="form-honeypot" style="display:none;" aria-hidden="true">
+                        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+                    </div>
                     <div class="form-group">
-                        <input type="text" id="name" name="name" required placeholder=" " autocomplete="off">
+                        <input type="text" id="name" name="name" required placeholder=" " autocomplete="name" maxlength="100">
                         <label for="name">Name</label>
                         <i class="fa-solid fa-user input-icon"></i>
                     </div>
                     <div class="form-group">
-                        <input type="email" id="email" name="email" required placeholder=" " autocomplete="off">
+                        <input type="email" id="email" name="email" required placeholder=" " autocomplete="email" maxlength="100">
                         <label for="email">Email</label>
                         <i class="fa-solid fa-envelope input-icon"></i>
                     </div>
                     <div class="form-group">
-                        <textarea id="message" name="message" rows="4" required placeholder=" "></textarea>
+                        <textarea id="message" name="message" rows="4" required placeholder=" " maxlength="3000"></textarea>
                         <label for="message">Message</label>
                         <i class="fa-solid fa-comment input-icon"></i>
                     </div>
+                    <div id="formStatus" class="form-status" role="status" aria-live="polite"></div>
                     <button type="submit" class="btn-resume btn-submit">
                         <span>Send Message</span>
                         <i class="fa-solid fa-paper-plane"></i>
@@ -655,13 +678,21 @@
         </div>
     </footer>
 
-    <div id="resumeModal" class="resume-modal">
+    <div id="resumeModal" class="resume-modal" role="dialog" aria-modal="true" aria-labelledby="resumeModalTitle">
         <div class="resume-modal-content glass-card">
-            <span class="close-modal" id="closeResumeBtn">&times;</span>
-            <h2 style="margin-bottom: 20px;">My Resume - <span class="purple-text">On Paper!</span></h2>
+            <button class="close-modal" id="closeResumeBtn" aria-label="Close resume modal">&times;</button>
+            <h2 id="resumeModalTitle" style="margin-bottom: 20px;">My Resume - <span class="purple-text">On Paper!</span></h2>
             <div class="resume-iframe-container">
-                <iframe src="portfolio_assets/Aakarsh_Resume.pdf" width="100%" height="100%"
+                <iframe src="portfolio_assets/Aakarsh_Resume.pdf" title="Aakarsh Bibhaw Resume" width="100%" height="100%"
                     style="border: none;"></iframe>
+            </div>
+            <div class="resume-modal-actions" style="margin-top: 18px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                <a href="portfolio_assets/Aakarsh_Resume.pdf" target="_blank" download class="btn-resume">
+                    <i class="fa-solid fa-download"></i> Download PDF
+                </a>
+                <a href="portfolio_assets/Aakarsh_Resume.pdf" target="_blank" rel="noopener noreferrer" class="btn-resume">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in New Tab
+                </a>
             </div>
         </div>
     </div>
