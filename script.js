@@ -325,37 +325,442 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── Fast, Non-Blocking Skill Filtering (250ms Snappy Transitions) ──
+    // ── Smooth GSAP-Powered Skill Filtering (Fluid, Non-Jumping Transitions) ──
     const filterBtns = document.querySelectorAll('.filter-btn');
     const skillCards = document.querySelectorAll('.skill-card[data-category]');
 
     if (filterBtns.length && skillCards.length) {
+        let isFiltering = false;
+
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
+                if (btn.classList.contains('active') || isFiltering) return;
+
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
                 const filter = btn.dataset.filter;
+                isFiltering = true;
+
+                const toHide = [];
+                const toShow = [];
 
                 skillCards.forEach(card => {
                     const category = card.dataset.category;
-                    const shouldShow = filter === 'all' || category === filter;
+                    const matches = filter === 'all' || category === filter;
+                    const isVisible = !card.classList.contains('d-none');
 
-                    if (shouldShow) {
-                        card.classList.remove('d-none');
-                        requestAnimationFrame(() => {
-                            card.classList.remove('filter-hide');
-                        });
-                    } else {
-                        card.classList.add('filter-hide');
-                        setTimeout(() => {
-                            if (card.classList.contains('filter-hide')) {
-                                card.classList.add('d-none');
-                            }
-                        }, 250);
+                    if (matches) {
+                        toShow.push(card);
+                    } else if (isVisible) {
+                        toHide.push(card);
                     }
                 });
+
+                function showFilteredCards(cards) {
+                    cards.forEach(c => {
+                        c.classList.remove('d-none', 'filter-hide');
+                    });
+
+                    if (typeof gsap !== 'undefined') {
+                        gsap.fromTo(cards,
+                            { opacity: 0, scale: 0.82, y: 18 },
+                            {
+                                opacity: 1,
+                                scale: 1,
+                                y: 0,
+                                duration: 0.35,
+                                stagger: 0.025,
+                                ease: "back.out(1.4)",
+                                onComplete: () => {
+                                    isFiltering = false;
+                                }
+                            }
+                        );
+                    } else {
+                        cards.forEach(c => c.style.opacity = '1');
+                        isFiltering = false;
+                    }
+                }
+
+                if (toHide.length && typeof gsap !== 'undefined') {
+                    gsap.to(toHide, {
+                        opacity: 0,
+                        scale: 0.8,
+                        y: 10,
+                        duration: 0.2,
+                        ease: "power2.in",
+                        stagger: 0.015,
+                        onComplete: () => {
+                            toHide.forEach(c => c.classList.add('d-none'));
+                            showFilteredCards(toShow);
+                        }
+                    });
+                } else {
+                    toHide.forEach(c => c.classList.add('d-none'));
+                    showFilteredCards(toShow);
+                }
             });
+        });
+    }
+
+    // ── Custom Glassmorphic Purpose Dropdown Controller ──
+    const customDropdown = document.getElementById('customPurposeDropdown');
+    const nativeSelect = document.getElementById('purpose');
+
+    if (customDropdown && nativeSelect) {
+        const trigger = customDropdown.querySelector('.custom-select-trigger');
+        const triggerText = customDropdown.querySelector('.custom-select-text');
+        const options = customDropdown.querySelectorAll('.custom-select-option');
+
+        function closeAllCustomDropdowns() {
+            customDropdown.classList.remove('open');
+            customDropdown.setAttribute('aria-expanded', 'false');
+            options.forEach(opt => opt.classList.remove('focused'));
+        }
+
+        // Toggle open / close
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = customDropdown.classList.contains('open');
+            closeAllCustomDropdowns();
+            if (!isOpen) {
+                customDropdown.classList.add('open');
+                customDropdown.setAttribute('aria-expanded', 'true');
+            }
+        });
+
+        // Option selection
+        options.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const value = option.dataset.value;
+                const text = option.querySelector('.option-text').textContent;
+
+                triggerText.textContent = text;
+                triggerText.classList.remove('placeholder');
+                customDropdown.classList.add('has-value');
+
+                options.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+
+                nativeSelect.value = value;
+                nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+
+                closeAllCustomDropdowns();
+            });
+        });
+
+        // Keyboard accessibility
+        customDropdown.addEventListener('keydown', (e) => {
+            const isOpen = customDropdown.classList.contains('open');
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const focused = customDropdown.querySelector('.custom-select-option.focused');
+                if (isOpen && focused) {
+                    focused.click();
+                } else {
+                    customDropdown.classList.toggle('open');
+                    customDropdown.setAttribute('aria-expanded', customDropdown.classList.contains('open'));
+                }
+            } else if (e.key === 'Escape') {
+                closeAllCustomDropdowns();
+            } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (!isOpen) {
+                    customDropdown.classList.add('open');
+                    customDropdown.setAttribute('aria-expanded', 'true');
+                    return;
+                }
+                const current = customDropdown.querySelector('.custom-select-option.focused') || customDropdown.querySelector('.custom-select-option.selected');
+                const allOpts = Array.from(options);
+                let idx = allOpts.indexOf(current);
+                if (e.key === 'ArrowDown') {
+                    idx = (idx + 1) % allOpts.length;
+                } else {
+                    idx = (idx - 1 + allOpts.length) % allOpts.length;
+                }
+                options.forEach(opt => opt.classList.remove('focused'));
+                allOpts[idx].classList.add('focused');
+                allOpts[idx].scrollIntoView({ block: 'nearest' });
+            }
+        });
+
+        // Click outside closes dropdown
+        document.addEventListener('click', (e) => {
+            if (!customDropdown.contains(e.target)) {
+                closeAllCustomDropdowns();
+            }
+        });
+
+        // Reset sync with contact form
+        const form = customDropdown.closest('form');
+        if (form) {
+            form.addEventListener('reset', () => {
+                triggerText.textContent = 'Select the primary reason for reaching out...';
+                triggerText.classList.add('placeholder');
+                customDropdown.classList.remove('has-value', 'open');
+                customDropdown.setAttribute('aria-expanded', 'false');
+                options.forEach(opt => opt.classList.remove('selected', 'focused'));
+                nativeSelect.value = '';
+                if (window.__contactTypewriter) {
+                    window.__contactTypewriter.resume();
+                }
+            });
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  SYNCHRONOUS CASE-BASED CONTACT FORM TYPEWRITER ENGINE
+    // ══════════════════════════════════════════════════════════
+    const contactCases = [
+        {
+            name: "Sarah Jenkins",
+            email: "sarah.jenkins@techcorp.io",
+            purpose: "Full-time / Internship Opportunity",
+            message: "Hi Aakarsh, we love your full-stack engineering work and would love to discuss an SDE role."
+        },
+        {
+            name: "Alex Rivera",
+            email: "alex@venturelab.ai",
+            purpose: "Project Collaboration / Freelance",
+            message: "Hey Aakarsh, building an AI-native SaaS platform and looking for a strong systems engineer to collaborate on architecture."
+        },
+        {
+            name: "Dr. Marcus Vance",
+            email: "m.vance@systemsresearch.org",
+            purpose: "Technical Advisory / Mentorship",
+            message: "Hello Aakarsh, saw your work on Nyaya Saathi. Would love to exchange perspectives on autonomous agentic workflows."
+        },
+        {
+            name: "Jordan Chen",
+            email: "jordan.chen@cloudscale.dev",
+            purpose: "Networking / Discussion",
+            message: "Hey! Loved your 3D WebGL portfolio and Lighthouse optimizations. Let's connect for an engineering sync."
+        },
+        {
+            name: "Elena Rostova",
+            email: "elena.rostova@globaltech.com",
+            purpose: "Other Inquiries",
+            message: "Hi Aakarsh, reaching out regarding a technical keynote and panel discussion on next-gen developer tooling."
+        }
+    ];
+
+    class SynchronousContactTypewriter {
+        constructor(elements, cases, options = {}) {
+            this.nameEl = elements.name;
+            this.emailEl = elements.email;
+            this.purposeEl = elements.purpose;
+            this.messageEl = elements.message;
+            this.customDropdown = elements.customDropdown;
+            this.cases = cases;
+
+            this.typeDuration = options.typeDuration || 1800; // ms to type full case
+            this.deleteDuration = options.deleteDuration || 750; // ms to delete full case
+            this.holdTime = options.holdTime || 2600; // ms to hold complete case
+            this.pauseBetween = options.pauseBetween || 250; // ms pause before next case
+            this.tickInterval = 30; // ms per update frame (crisp 33.3 fps)
+
+            this.caseIndex = 0;
+            this.state = 'idle'; // 'idle', 'typing', 'holding', 'deleting', 'paused'
+            this.progress = 0;
+            this.timer = null;
+            this.isUserInteracting = false;
+            this.hasStarted = false;
+            this.isInView = false;
+
+            this.init();
+        }
+
+        init() {
+            const inputs = [this.nameEl, this.emailEl, this.messageEl].filter(Boolean);
+
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    this.isUserInteracting = true;
+                    clearTimeout(this.timer);
+                    input.setAttribute('placeholder', '');
+                });
+
+                input.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        this.checkInteractionState();
+                    }, 150);
+                });
+
+                input.addEventListener('input', () => {
+                    this.isUserInteracting = true;
+                    clearTimeout(this.timer);
+                });
+            });
+
+            if (this.customDropdown) {
+                this.customDropdown.addEventListener('click', () => {
+                    this.checkInteractionState();
+                });
+            }
+
+            // Keep fields clear before the visitor arrives at the contact section
+            this.renderSlice(0);
+
+            // Observe contact section so typing motion begins strictly upon section visit
+            const contactSection = document.getElementById('contact');
+            if (contactSection && 'IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            this.isInView = true;
+                            if (!this.hasStarted) {
+                                this.hasStarted = true;
+                                this.timer = setTimeout(() => {
+                                    this.startTyping();
+                                }, 300);
+                            } else if (!this.isUserInteracting && this.state === 'paused') {
+                                this.resume();
+                            }
+                        } else {
+                            this.isInView = false;
+                            // Pause off-screen to conserve resources and avoid missing motion
+                            if (this.hasStarted && !this.isUserInteracting) {
+                                this.state = 'paused';
+                                clearTimeout(this.timer);
+                            }
+                        }
+                    });
+                }, { threshold: 0.2 });
+
+                observer.observe(contactSection);
+            } else {
+                // Fallback for browsers without IntersectionObserver
+                this.timer = setTimeout(() => {
+                    this.startTyping();
+                }, 1000);
+            }
+        }
+
+        checkInteractionState() {
+            const hasInputValue = [this.nameEl, this.emailEl, this.messageEl].some(
+                el => el && el.value && el.value.trim().length > 0
+            );
+            const isAnyFocused = [this.nameEl, this.emailEl, this.messageEl].some(
+                el => el && document.activeElement === el
+            );
+            const hasSelectedPurpose = this.customDropdown && this.customDropdown.classList.contains('has-value');
+
+            if (!hasInputValue && !isAnyFocused && !hasSelectedPurpose) {
+                this.isUserInteracting = false;
+                this.resume();
+            }
+        }
+
+        resume() {
+            clearTimeout(this.timer);
+            this.state = 'typing';
+            this.progress = 0;
+            this.timer = setTimeout(() => this.tickTyping(), 250);
+        }
+
+        renderSlice(progress) {
+            const c = this.cases[this.caseIndex];
+            const p = Math.max(0, Math.min(1, progress));
+
+            // Name
+            if (this.nameEl && (!this.nameEl.value || !this.nameEl.value.trim()) && document.activeElement !== this.nameEl) {
+                const len = Math.ceil(c.name.length * p);
+                this.nameEl.setAttribute('placeholder', c.name.substring(0, len));
+            }
+
+            // Email
+            if (this.emailEl && (!this.emailEl.value || !this.emailEl.value.trim()) && document.activeElement !== this.emailEl) {
+                const len = Math.ceil(c.email.length * p);
+                this.emailEl.setAttribute('placeholder', c.email.substring(0, len));
+            }
+
+            // Purpose (Only if user hasn't actively selected a purpose)
+            if (this.purposeEl && this.customDropdown && !this.customDropdown.classList.contains('has-value')) {
+                const len = Math.ceil(c.purpose.length * p);
+                const str = c.purpose.substring(0, len);
+                this.purposeEl.textContent = str.length > 0 ? str : '\u00A0';
+                this.purposeEl.classList.add('placeholder');
+            }
+
+            // Message
+            if (this.messageEl && (!this.messageEl.value || !this.messageEl.value.trim()) && document.activeElement !== this.messageEl) {
+                const len = Math.ceil(c.message.length * p);
+                this.messageEl.setAttribute('placeholder', c.message.substring(0, len));
+            }
+        }
+
+        startTyping() {
+            if (this.isUserInteracting) return;
+            this.state = 'typing';
+            this.progress = 0;
+            this.tickTyping();
+        }
+
+        tickTyping() {
+            if (this.isUserInteracting) return;
+            const step = this.tickInterval / this.typeDuration;
+            this.progress += step;
+
+            if (this.progress >= 1) {
+                this.progress = 1;
+                this.renderSlice(1);
+                this.state = 'holding';
+                this.timer = setTimeout(() => {
+                    this.startDeleting();
+                }, this.holdTime);
+                return;
+            }
+
+            this.renderSlice(this.progress);
+            this.timer = setTimeout(() => this.tickTyping(), this.tickInterval);
+        }
+
+        startDeleting() {
+            if (this.isUserInteracting) return;
+            this.state = 'deleting';
+            this.tickDeleting();
+        }
+
+        tickDeleting() {
+            if (this.isUserInteracting) return;
+            const step = this.tickInterval / this.deleteDuration;
+            this.progress -= step;
+
+            if (this.progress <= 0) {
+                this.progress = 0;
+                this.renderSlice(0);
+                this.caseIndex = (this.caseIndex + 1) % this.cases.length;
+                this.timer = setTimeout(() => {
+                    this.startTyping();
+                }, this.pauseBetween);
+                return;
+            }
+
+            this.renderSlice(this.progress);
+            this.timer = setTimeout(() => this.tickDeleting(), this.tickInterval);
+        }
+    }
+
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const messageInput = document.getElementById('message');
+    const purposeText = document.querySelector('.custom-select-text');
+    const customPurposeDropdown = document.getElementById('customPurposeDropdown');
+
+    if (nameInput || emailInput || messageInput || purposeText) {
+        window.__contactTypewriter = new SynchronousContactTypewriter({
+            name: nameInput,
+            email: emailInput,
+            purpose: purposeText,
+            message: messageInput,
+            customDropdown: customPurposeDropdown
+        }, contactCases, {
+            typeDuration: 1800,
+            deleteDuration: 750,
+            holdTime: 2600,
+            pauseBetween: 250
         });
     }
 });

@@ -30,7 +30,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { name, email, message, _gotcha } = req.body || {};
+    const { name, email, message, purpose, _gotcha } = req.body || {};
 
     // ── 1. Anti-Spam Honeypot Check ──
     if (_gotcha) {
@@ -52,6 +52,7 @@ module.exports = async function handler(req, res) {
     // ── 3. Strict Input Validation & Length Bounds ──
     const cleanName = (name || '').trim();
     const cleanEmail = (email || '').trim();
+    const cleanPurpose = (purpose || 'General Inquiry').trim();
     const cleanMessage = (message || '').trim();
 
     if (!cleanName || cleanName.length > 100) {
@@ -63,6 +64,10 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ message: 'Invalid or missing email address.' });
     }
 
+    if (cleanPurpose.length > 100) {
+      return res.status(400).json({ message: 'Purpose exceeds maximum allowed length.' });
+    }
+
     if (!cleanMessage || cleanMessage.length < 5 || cleanMessage.length > 3000) {
       return res.status(400).json({ message: 'Message must be between 5 and 3000 characters.' });
     }
@@ -70,18 +75,20 @@ module.exports = async function handler(req, res) {
     // ── 4. HTML Entity Sanitization (Prevent Email/HTML Injection) ──
     const safeName = escapeHtml(cleanName);
     const safeEmail = escapeHtml(cleanEmail);
+    const safePurpose = escapeHtml(cleanPurpose);
     const safeMessage = escapeHtml(cleanMessage).replace(/\n/g, '<br/>');
 
     const payload = JSON.stringify({
       from: 'Portfolio Contact <onboarding@resend.dev>',
       to: receiverEmail,
       reply_to: cleanEmail,
-      subject: `New Portfolio Message from ${safeName}`,
+      subject: `[${safePurpose}] New Portfolio Message from ${safeName}`,
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111;">
           <h2 style="color: #6d28d9; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">New Contact Form Submission</h2>
           <p><strong>Name:</strong> ${safeName}</p>
           <p><strong>Email:</strong> <a href="mailto:${safeEmail}">${safeEmail}</a></p>
+          <p><strong>Purpose:</strong> <span style="background: #ede9fe; color: #6d28d9; padding: 4px 10px; border-radius: 6px; font-weight: 600;">${safePurpose}</span></p>
           <p><strong>Message:</strong></p>
           <blockquote style="background: #f3f4f6; padding: 12px 16px; border-left: 4px solid #8b5cf6; margin: 0; border-radius: 4px;">
             ${safeMessage}
