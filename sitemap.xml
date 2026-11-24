@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://aakarsh-devhq.vercel.app/</loc>
-    <lastmod>2026-11-23</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://raw.githubusercontent.com/arshbibhaw/DevHQ-Personal-Portfolio-Website/main/portfolio_assets/Aakarsh-DevHQ.png</image:loc>
+      <image:title>Aakarsh Bibhaw Portfolio - DevHQ</image:title>
+      <image:caption>Interactive 3D WebGL Portfolio of Aakarsh Bibhaw</image:caption>
+    </image:image>
   </url>
 </urlset>

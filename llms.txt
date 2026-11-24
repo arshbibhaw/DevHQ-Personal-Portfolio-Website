@@ -1,0 +1,51 @@
+# Aakarsh Bibhaw (DevHQ)
+
+> Personal portfolio and software engineering knowledgebase of Aakarsh Bibhaw, a Computer Science Undergraduate at IIIT Kota (Batch 2024–2028), Full Stack Developer, and WebGL Enthusiast.
+
+## Overview
+- **Name:** Aakarsh Bibhaw (online alias: `arshbibhaw`)
+- **Title:** Software Developer & Computer Science Undergraduate
+- **Institution:** Indian Institute of Information Technology Kota (IIIT Kota)
+- **Portfolio Website:** https://aakarsh-devhq.vercel.app/
+- **GitHub:** https://github.com/arshbibhaw
+- **LinkedIn:** https://linkedin.com/in/aakarsh-bibhaw
+- **LeetCode:** https://leetcode.com/arshbibhaw
+- **HackerRank:** https://hackerrank.com/arshbibhaw
+- **Email:** cse.arsh@gmail.com
+
+## Professional Experience
+- **OneShopAI** (Software Development Engineer Intern | Oct 2026 – Present):
+  - Driving end-to-end development of a full-stack SaaS marketplace from concept to production.
+  - Architected interactive prototypes, system specifications, and workflow strategies for buyer and seller experiences.
+- **CollegeDunia Pvt. Ltd.** (Content Developer Intern | Jun 2025 – Aug 2025):
+  - Managed production-stage content rendering using HTML and LaTeX across CMS platforms.
+  - Streamlined content formatting workflows to reduce publishing inconsistencies.
+
+## Featured Software Projects
+- **Nyaya Saathi** (Legal Tech / AI Navigation Platform):
+  - AI-assisted legal navigation platform translating citizen legal problems into verified legal information, evidence insights, actionable steps, and structured drafts.
+  - *Tech Stack:* React.js, FastAPI, Python, Gemini AI, TailwindCSS.
+  - *Live App:* https://nyaayasaathi.vercel.app
+  - *Repository:* https://github.com/arshbibhaw/Nyaya-Saathi
+- **IIIT Kernel Official Website** (Official Technical Club Platform):
+  - Lead developer for the official digital home of IIIT Kota's founding technical club Kernel.
+  - *Tech Stack:* HTML5, CSS3, JavaScript, Responsive Design, Vercel.
+  - *Live Website:* https://iiit-kernel.vercel.app
+  - *Repository:* https://github.com/arshbibhaw/IIIT-Kernel-2K25-Website
+- **DevHQ** (3D Interactive Developer Portfolio):
+  - Performance-optimized personal portfolio featuring WebGL 3D particle systems, GSAP ScrollTrigger animations, and serverless form handling.
+  - *Tech Stack:* Three.js, GSAP 3, WebGL, Node.js, Resend API.
+  - *Live Portfolio:* https://aakarsh-devhq.vercel.app/
+  - *Repository:* https://github.com/arshbibhaw/DevHQ-Personal-Portfolio-Website
+- **TruCheck** (Proactive Browser Security Extension):
+  - Real-time anti-phishing extension assigning instant Trust Scores to websites using Google Safe Browsing and HaveIBeenPwned APIs with an intent-aware Login Shield.
+  - *Tech Stack:* JavaScript, Chrome Extensions API, Google Safe Browsing, HaveIBeenPwned.
+  - *Repository:* https://github.com/arshbibhaw/TruCheck-Browser-Security-Extension
+- **Stealth Project**:
+  - High-impact confidential platform currently in development under NDA.
+
+## Core Technical Skills
+- **Languages:** Python, JavaScript (ES6+), TypeScript, C++, C, HTML5, CSS3, LaTeX, SQL
+- **Frontend & Creative:** React.js, Next.js, Three.js, WebGL, GSAP, Tailwind CSS, Responsive Web Design
+- **Backend & APIs:** FastAPI, Node.js, Express.js, RESTful APIs, Gemini AI Integration
+- **Databases & Tools:** MongoDB, PostgreSQL, Git, GitHub, Chrome DevTools, Vercel, Postman

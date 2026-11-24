@@ -499,6 +499,63 @@ body.preloader-active {
     transition-delay: 0.5s;
 }
 
+.about-cta-wrapper {
+    margin-top: 36px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease-out;
+}
+
+.scroll-reveal.expanded .about-cta-wrapper {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.65s;
+}
+
+.about-readme-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 28px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background: rgba(168, 85, 247, 0.08);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    border-radius: 50px;
+    color: #f3e8ff;
+    text-decoration: none;
+    transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.about-readme-btn:hover {
+    background: rgba(168, 85, 247, 0.22);
+    border-color: var(--accent-purple);
+    color: #fff;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.45);
+}
+
+.about-readme-btn i.fa-brands {
+    font-size: 1.15rem;
+}
+
+.about-readme-btn i.fa-arrow-up-right-from-square {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    transition: transform 0.3s ease;
+}
+
+.about-readme-btn:hover i.fa-arrow-up-right-from-square {
+    transform: translate(2px, -2px);
+    opacity: 1;
+}
+
 
 .skills-section {
     padding: 80px 20px;
@@ -788,7 +845,7 @@ body.preloader-active {
     height: 0%;
     background: linear-gradient(180deg, var(--accent-purple));
     box-shadow: 0 0 15px var(--accent-purple);
-    transition: height 0.4s ease-out;
+    will-change: height;
 }
 
 .timeline-progress::after {
@@ -1193,15 +1250,15 @@ body.preloader-active {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 10px;
     width: 100%;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 
 .experience-card .project-tag {
     background: rgba(168, 85, 247, 0.12);
     color: #e9d5ff;
-    padding: 5px 12px;
+    padding: 5px 14px;
     border-radius: 20px;
     font-size: 0.78rem;
     font-weight: 600;
@@ -1215,6 +1272,7 @@ body.preloader-active {
     overflow: hidden;
     text-overflow: ellipsis;
     min-width: 0;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.12);
 }
 
 .tag-dot {
@@ -1233,25 +1291,26 @@ body.preloader-active {
     right: auto;
     font-family: 'VALORANT', sans-serif;
     color: var(--accent-purple);
-    font-size: 0.78rem;
-    letter-spacing: 1px;
-    background: rgba(168, 85, 247, 0.08);
-    border: 1px solid rgba(168, 85, 247, 0.22);
-    padding: 4px 10px;
-    border-radius: 8px;
+    font-size: 0.76rem;
+    letter-spacing: 1.2px;
+    background: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.28);
+    padding: 5px 12px;
+    border-radius: 20px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     white-space: nowrap;
     flex-shrink: 0;
     line-height: 1.2;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.12);
 }
 
 .experience-card .stealth-date {
-    background: rgba(168, 85, 247, 0.18) !important;
-    border-color: rgba(168, 85, 247, 0.45) !important;
+    background: rgba(168, 85, 247, 0.2) !important;
+    border-color: rgba(168, 85, 247, 0.5) !important;
     color: #f3e8ff !important;
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.25);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
 }
 
 .experience-date {
@@ -1264,19 +1323,24 @@ body.preloader-active {
 .project-links-wrapper {
     margin-top: auto;
     display: flex;
-    gap: 15px;
-    padding-top: 25px;
-    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 20px;
+    flex-wrap: nowrap;
+    width: 100%;
 }
 
 .project-btn {
+    flex: 1 1 0px;
+    min-width: 0;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 24px;
-    font-size: 0.95rem;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 8px;
+    font-size: 0.82rem;
     font-weight: 600;
     text-decoration: none;
+    white-space: nowrap;
     transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.03);
@@ -1284,6 +1348,7 @@ body.preloader-active {
     color: #e5e7eb;
     position: relative;
     overflow: hidden;
+    text-overflow: ellipsis;
     z-index: 2;
     will-change: transform, box-shadow;
     transform: translateZ(0);
@@ -1303,6 +1368,7 @@ body.preloader-active {
     display: inline-block;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     pointer-events: none;
+    flex-shrink: 0;
 }
 
 .project-btn:hover i {
@@ -1385,10 +1451,7 @@ body.preloader-active {
     text-decoration: none;
     display: block;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    /* Enforce GPU clipping to prevent square corner bleed */
-    transform: translateZ(0);
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
-    mask-image: radial-gradient(white, black);
+    background-clip: padding-box;
     isolation: isolate;
 }
 
@@ -1400,6 +1463,7 @@ body.preloader-active {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 13px 13px 0 0;
     gap: 6px;
+    background-clip: padding-box;
 }
 
 .mockup-dot {
@@ -1435,9 +1499,7 @@ body.preloader-active {
     overflow: hidden;
     background: #0d0d14;
     border-radius: 0 0 13px 13px;
-    transform: translateZ(0);
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
-    mask-image: radial-gradient(white, black);
+    background-clip: padding-box;
 }
 
 .mockup-img {
@@ -2027,7 +2089,23 @@ body.preloader-active {
 
     .experience-date {
         position: static;
-        margin-bottom: 15px;
+        margin-bottom: 0;
+    }
+
+    .project-links-wrapper {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-links-wrapper {
+        gap: 6px;
+    }
+
+    .project-btn {
+        padding: 8px 6px;
+        font-size: 0.78rem;
+        gap: 5px;
     }
 }
 
@@ -2752,7 +2830,8 @@ body.preloader-active {
 }
 
 .about-section .glass-card h2,
-.about-section .glass-card p {
+.about-section .glass-card p,
+.about-section .glass-card .about-cta-wrapper {
     position: relative;
     z-index: 2;
 }
@@ -2813,24 +2892,41 @@ body.preloader-active {
     position: absolute;
     top: 18px;
     right: 20px;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    aspect-ratio: 1 / 1;
+    border-radius: 50% !important;
     background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: #e5e7eb;
     font-size: 1.15rem;
     font-family: inherit;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     outline: none;
+    -webkit-appearance: none;
+    appearance: none;
     padding: 0;
     margin: 0;
+    line-height: 1;
     z-index: 10;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.close-modal i {
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    pointer-events: none;
 }
 
 .close-modal:hover {
@@ -3233,29 +3329,6 @@ body.preloader-active {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border-width: 0;
-}
-
-/* ── Preloader Skip Button ── */
-.preloader-skip-btn {
-    margin-top: 25px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #d1d5db;
-    padding: 8px 22px;
-    border-radius: 50px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    font-family: 'Inter', sans-serif;
-    z-index: 10;
-}
-
-.preloader-skip-btn:hover {
-    background: rgba(168, 85, 247, 0.2);
-    border-color: var(--accent-purple);
-    color: #fff;
-    transform: translateY(-1px);
 }
 
 /* ── Contact Form Status Feedback ── */

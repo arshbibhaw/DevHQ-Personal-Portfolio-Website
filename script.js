@@ -96,50 +96,68 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── Throttled Scroll Listener for Timeline (Eliminates Layout Thrashing) ──
+    // ── Smooth 60/120fps LERP Momentum Scroll for Experience Timeline ──
     const timelineSections = document.querySelectorAll('.timeline');
     if (timelineSections.length) {
-        let timelineTicking = false;
+        timelineSections.forEach(timelineSection => {
+            const timelineProgress = timelineSection.querySelector('.timeline-progress');
+            const timelineDots = timelineSection.querySelectorAll('.timeline-dot');
 
-        function updateTimelines() {
-            timelineSections.forEach(timelineSection => {
-                const timelineProgress = timelineSection.querySelector('.timeline-progress');
-                const timelineDots = timelineSection.querySelectorAll('.timeline-dot');
+            if (!timelineProgress) return;
 
-                if (timelineProgress) {
-                    const sectionRect = timelineSection.getBoundingClientRect();
-                    const sectionTop = sectionRect.top;
-                    const sectionHeight = sectionRect.height;
-                    const windowHeight = window.innerHeight;
+            let targetProgress = 0;
+            let currentProgress = 0;
+            let isRunning = false;
 
-                    const startOffset = windowHeight / 2;
-                    let scrollDistance = startOffset - sectionTop;
+            function calculateTarget() {
+                const sectionRect = timelineSection.getBoundingClientRect();
+                const sectionTop = sectionRect.top;
+                const sectionHeight = sectionRect.height;
+                const windowHeight = window.innerHeight;
 
-                    let progressPercentage = (scrollDistance / sectionHeight) * 100;
-                    progressPercentage = Math.max(0, Math.min(100, progressPercentage));
+                // Timeline bar fills as it scrolls past viewport midpoint
+                const startOffset = windowHeight * 0.55;
+                const scrollDistance = startOffset - sectionTop;
 
-                    timelineProgress.style.height = `${progressPercentage}%`;
+                const pct = (scrollDistance / sectionHeight) * 100;
+                targetProgress = Math.max(0, Math.min(100, pct));
 
-                    const lineBottom = timelineProgress.getBoundingClientRect().bottom;
-                    timelineDots.forEach(dot => {
-                        const dotTop = dot.getBoundingClientRect().top;
-                        if (lineBottom > dotTop) {
-                            dot.classList.add('active');
-                        } else {
-                            dot.classList.remove('active');
-                        }
-                    });
+                if (!isRunning) {
+                    isRunning = true;
+                    requestAnimationFrame(renderSmoothTimeline);
                 }
-            });
-            timelineTicking = false;
-        }
-
-        window.addEventListener('scroll', () => {
-            if (!timelineTicking) {
-                requestAnimationFrame(updateTimelines);
-                timelineTicking = true;
             }
-        }, { passive: true });
+
+            function renderSmoothTimeline() {
+                const diff = targetProgress - currentProgress;
+                if (Math.abs(diff) > 0.05) {
+                    currentProgress += diff * 0.12;
+                    applyProgress(currentProgress);
+                    requestAnimationFrame(renderSmoothTimeline);
+                } else {
+                    currentProgress = targetProgress;
+                    applyProgress(currentProgress);
+                    isRunning = false;
+                }
+            }
+
+            function applyProgress(pct) {
+                timelineProgress.style.height = `${pct.toFixed(2)}%`;
+                const progressPx = (pct / 100) * timelineSection.offsetHeight;
+                timelineDots.forEach(dot => {
+                    const dotCenter = dot.offsetTop + (dot.offsetHeight / 2);
+                    if (progressPx >= dotCenter) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', calculateTarget, { passive: true });
+            window.addEventListener('resize', calculateTarget, { passive: true });
+            calculateTarget();
+        });
     }
 
     // ── Experience Card Radial Glow ──
@@ -794,7 +812,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const sleekFill = document.getElementById('preloaderSleekFill');
     const particlesContainer = document.getElementById('preloaderParticles');
-    const skipBtn = document.getElementById('preloaderSkipBtn');
 
     const DURATION = 2400; // Balanced, adequate cinematic duration (~2.4s)
     const startTime = performance.now();
@@ -875,17 +892,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300);
     }
 
-    if (skipBtn) {
-        skipBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            forceDismiss();
-        });
-    }
-
-    preloader.addEventListener('click', (e) => {
-        if (e.target !== skipBtn) {
-            forceDismiss();
-        }
+    preloader.addEventListener('click', () => {
+        forceDismiss();
     });
 
     window.addEventListener('load', () => {
