@@ -1,19 +1,33 @@
 {
   "name": "devhq-portfolio",
   "version": "1.0.0",
-  "description": "DevHQ Personal Portfolio Website by Aakarsh Bibhaw",
+  "private": true,
+  "description": "DevHQ Personal Portfolio Website by Aakarsh Bibhaw - Featuring 3D WebGL Starfield, GSAP Animations, and Serverless Email API",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "npx http-server -p 3000"
+    "dev": "vercel dev",
+    "serve": "npx http-server -p 3000",
+    "validate": "node -c script.js && node -c api/submit.js",
+    "test": "npm run validate"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/arshbibhaw/DevHQ-Personal-Portfolio-Website.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "portfolio",
+    "threejs",
+    "webgl",
+    "gsap",
+    "developer-portfolio",
+    "aakarsh-bibhaw",
+    "fastapi",
+    "react",
+    "resend-api",
+    "vercel-serverless"
+  ],
+  "author": "Aakarsh Bibhaw <cse.arsh@gmail.com> (https://aakarsh-devhq.vercel.app/)",
+  "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/arshbibhaw/DevHQ-Personal-Portfolio-Website/issues"
   },

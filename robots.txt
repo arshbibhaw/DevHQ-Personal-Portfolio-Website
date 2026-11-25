@@ -23,5 +23,6 @@ Allow: /
 User-agent: Applebot
 Allow: /
 
-# Sitemap and LLM context endpoints
+# Canonical Sitemaps & Machine-Readable Knowledge
 Sitemap: https://aakarsh-devhq.vercel.app/sitemap.xml
+# LLM Context Standard: https://aakarsh-devhq.vercel.app/llms.txt

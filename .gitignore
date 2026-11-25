@@ -6,6 +6,9 @@ node_modules/
 .env.local
 .env.*.local
 
+# Vercel & build artifacts
+.vercel/
+
 # OS generated files
 .DS_Store
 Thumbs.db
@@ -14,6 +17,11 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 # Backups and temporary files
 portfolio_assets/*_orig.*
-  
